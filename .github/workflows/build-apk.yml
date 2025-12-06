@@ -10,6 +10,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      # ✅ PASO NUEVO AGREGADO - Configura Git para clonar repositorios privados
+      - name: Configurar Git para autenticación
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/".insteadOf "https://github.com/"
         
       - name: Setup Java
         uses: actions/setup-java@v4
