@@ -69,7 +69,8 @@ val includeGitRepos = listOf(
         name = "dicio-numbers",
         uri = "https://github.com/abdel-monzon/dicio-numbers",
         projectPath = ":numbers",
-        commit = findInVersionCatalog("dicioNumbers"),
+        // CAMBIO IMPORTANTE: Usamos "master" en lugar de un hash específico
+        commit = "master",  // Esto hará que siempre use la última versión de la rama master
     ),
     IncludeGitRepo(
         name = "dicio-sentences-compiler",
@@ -122,7 +123,12 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
         for (repo in includeGitRepos) {
             include(repo.name) {
                 uri.set(repo.uri)
-                commit.set(repo.commit)
+                // ESTE ES EL CAMBIO CLAVE: Para dicio-numbers, usar branch en lugar de commit
+                if (repo.name == "dicio-numbers") {
+                    branch.set("master")
+                } else {
+                    commit.set(repo.commit)
+                }
                 autoInclude.set(false)
                 includeBuild("") {
                     dependencySubstitution {
