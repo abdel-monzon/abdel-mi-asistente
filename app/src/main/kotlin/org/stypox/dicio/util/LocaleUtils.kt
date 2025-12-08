@@ -63,7 +63,7 @@ object LocaleUtils {
 
         // first try with full locale name (e.g. en-US)
         val full = (locale.language + "-" + locale.country).lowercase()
-        println(full + " " + (full == "it-it") + " " + normalizedLocales["it-it"] + " " + normalizedLocales[full] + " " + normalizedLocales)
+        // REMOVÍ EL println DE DEPURACIÓN QUE ESTABA AQUÍ
         normalizedLocales[full]?.let { return it }
 
         // then try with only base language (e.g. en)
