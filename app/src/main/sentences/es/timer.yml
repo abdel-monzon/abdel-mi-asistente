@@ -1,11 +1,16 @@
 set:
-  - temporizador|(avísame en) .duration.
-  - (configurar?)|iniciar|crear (un? )?(temporizador (.duration. )?)|(temporizador (de|para )?.duration.? (llamado|con el nombre) .name.?)
+  - (configura|establece|pon) (un )?temporizador (de |para )?.duration.
+  - (configura|establece|pon) (un )?temporizador (de |para )?.duration. (con nombre|llamado|con el nombre) .name.
+  - (configura|establece|pon) (un )?temporizador (llamado|con el nombre) .name. (de |para )?.duration.
+  - temporizador (de |para )?.duration.
 
 cancel:
-  - cancelar|detener|desactivar|finalizar|terminar (el )?(.name.? temporizador)|(temporizador (llamado|con el nombre) .name.)
-  - silenciar|apagar|quitar sonido|mutear (el )?(.name.? temporizador|alerta|sonido|timbre)|(temporizador|alerta|sonido|timbre (llamado|con el nombre) .name.)
+  - (cancela|detén|para) (el |los )?temporizador(es)?.
+  - (cancela|detén|para) (el )?temporizador .name.
+  - (cancela|detén|para) todos los temporizadores.
 
 query:
-  - cuánto (tiempo )?queda? (en )?(el )?(.name.? temporizador)|(temporizador (llamado|con el nombre) .name.)
-  - cuándo (va a |se )?vencer? (el )?(.name.? temporizador)|(temporizador (llamado|con el nombre) .name.)
+  - (cuánto (tiempo )?(queda|falta)|cuál es el estado) (del |de los )?temporizador(es)?.
+  - (cuánto (tiempo )?(queda|falta)|cuál es el estado) (del )?temporizador .name.
+  - (cuándo (termina|finaliza)|a qué hora (termina|finaliza)) (el |los )?temporizador(es)?.
+  - (cuándo (termina|finaliza)|a qué hora (termina|finaliza)) (el )?temporizador .name.
