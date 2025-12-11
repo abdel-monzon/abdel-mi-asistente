@@ -5,12 +5,12 @@ set:
   - temporizador (de |para )?.duration.
 
 cancel:
-  - (cancela|detén|para) (el |los )?temporizador(es)?.
+  - (cancela|detén|para) (el |los )?temporizador(es)?
   - (cancela|detén|para) (el )?temporizador .name.
-  - (cancela|detén|para) todos los temporizadores.
+  - (cancela|detén|para) todos los temporizadores
 
 query:
-  - (cuánto (tiempo )?(queda|falta)|cuál es el estado) (del |de los )?temporizador(es)?.
+  - (cuánto (tiempo )?(queda|falta)|cuál es el estado) (del |de los )?temporizador(es)?
   - (cuánto (tiempo )?(queda|falta)|cuál es el estado) (del )?temporizador .name.
-  - (cuándo (termina|finaliza)|a qué hora (termina|finaliza)) (el |los )?temporizador(es)?.
+  - (cuándo (termina|finaliza)|a qué hora (termina|finaliza)) (el |los )?temporizador(es)?
   - (cuándo (termina|finaliza)|a qué hora (termina|finaliza)) (el )?temporizador .name.
