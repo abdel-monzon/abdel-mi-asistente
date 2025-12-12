@@ -130,8 +130,6 @@ tasks.withType(UnicodeCldrLanguagesTask::class) {
     // tell the UnicodeCldrLanguagesTask plugin which git commit of the
     // https://github.com/unicode-org/cldr repo to use as a source of data
     unicodeCldrGitCommit = libs.versions.unicodeCldrGitCommit
-    // El plugin no tiene una propiedad 'includeLanguages' pública.
-    // Procesa idiomas según los datos CLDR disponibles.
 }
 
 dependencies {
