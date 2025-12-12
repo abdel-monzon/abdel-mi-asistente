@@ -220,3 +220,18 @@ configurations.configureEach {
 fun gitBranch(): String {
     return Git.open(rootDir).use { it.repository.branch }
 }
+// ====================================================================
+// CONFIGURACIÓN PARA INCLUIR ESPAÑOL EN LOS PLUGINS
+// ====================================================================
+
+// Configuración para el plugin de frases (sentences-compiler-plugin)
+tasks.withType<org.stypox.dicio.sentencesCompilerPlugin.GenerateSkillSentencesKtTask> {
+    // Incluye los idiomas que deseas procesar
+    includeLanguages = listOf("en", "it", "es")
+}
+
+// Configuración para el plugin de idiomas CLDR (unicode-cldr-plugin)
+tasks.withType<org.stypox.dicio.unicodeCldrPlugin.UnicodeCldrLanguagesTask> {
+    // Incluye los idiomas que deseas procesar
+    includeLanguages = listOf("en", "it", "es")
+}
