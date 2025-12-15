@@ -1,15 +1,9 @@
 import me.champeau.gradle.igp.gitRepositories
-import org.eclipse.jgit.api.Git
-import java.io.FileInputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardCopyOption
-import java.util.Properties
 
 rootProject.name = "Dicio"
 include(":app")
 include(":skill")
-// we use includeBuild here since the plugins are compile-time dependencies
+include(":numbers")  // Incluye el módulo numbers
 includeBuild("sentences-compiler-plugin")
 includeBuild("unicode-cldr-plugin")
 
@@ -22,16 +16,7 @@ pluginManagement {
 }
 
 plugins {
-    // need to manually read version catalog because it is not available in settings.gradle.kts
-    // this code is duplicate with the below but there is no way to avoid it...
-    fun findInVersionCatalog(versionIdentifier: String): String {
-        val regex = "^.*$versionIdentifier *= *\"([^\"]+)\".*$".toRegex()
-        return File("gradle/libs.versions.toml")
-            .readLines()
-            .firstNotNullOf { regex.find(it)?.groupValues?.get(1) }
-    }
-
-    id("me.champeau.includegit") version findInVersionCatalog("includegitPlugin")
+    id("me.champeau.includegit") version "0.1.5"
 }
 
 dependencyResolutionManagement {
@@ -42,47 +27,24 @@ dependencyResolutionManagement {
     }
 }
 
-
-// All of the code below handles depending on libraries from git repos, in particular dicio-numbers,
-// dicio-skill and dicio-sentences-compiler. The git commits to checkout can be updated in the
-// version catalog. If you want to use a local copy of the projects (provided that you have cloned
-// them in `../dicio-*`), you can add `useLocalDicioLibraries=true` in `local.properties`.
-
-data class IncludeGitRepo(
-    val name: String,
-    val uri: String,
-    val projectPath: String,
-    val commit: String,
-)
-
-// need to manually read version catalog because it is not available in settings.gradle.kts
-// this code is duplicate with the above but there is no way to avoid it...
-fun findInVersionCatalog(versionIdentifier: String): String {
-    val regex = "^.*$versionIdentifier *= *\"([^\"]+)\".*$".toRegex()
-    return File("gradle/libs.versions.toml")
-        .readLines()
-        .firstNotNullOf { regex.find(it)?.groupValues?.get(1) }
-}
-
 val includeGitRepos = listOf(
-    IncludeGitRepo(
+    org.stypox.dicio.IncludeGitRepo(
         name = "dicio-numbers",
         uri = "https://github.com/abdel-monzon/dicio-numbers",
         projectPath = ":numbers",
-        // CAMBIO IMPORTANTE: Usamos "master" en lugar de un hash específico
-        commit = "master",  // Esto hará que siempre use la última versión de la rama master
+        commit = "master",  // Usa la rama master
     ),
-    IncludeGitRepo(
+    org.stypox.dicio.IncludeGitRepo(
         name = "dicio-sentences-compiler",
         uri = "https://github.com/Stypox/dicio-sentences-compiler",
         projectPath = ":sentences_compiler",
-        commit = findInVersionCatalog("dicioSentencesCompiler"),
+        commit = "main",  // Cambia esto según el commit necesario
     ),
 )
 
-val localProperties = Properties().apply {
+val localProperties = java.util.Properties().apply {
     try {
-        load(FileInputStream(File(rootDir, "local.properties")))
+        load(java.io.FileInputStream(java.io.File(rootDir, "local.properties")))
     } catch (e: Throwable) {
         println("Warning: can't read local.properties: $e")
     }
@@ -92,38 +54,15 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
     for (repo in includeGitRepos) {
         includeBuild("../${repo.name}") {
             dependencySubstitution {
-                substitute(module("git.included.build:${repo.name}"))
-                    .using(project(repo.projectPath))
+                substitute(module("git.included.build:${repo.name}")).using(project(repo.projectPath))
             }
         }
     }
-
 } else {
-    // if the repo has already been cloned, the gitRepositories plugin is buggy and doesn't
-    // fetch the remote repo before trying to checkout the commit (in case the commit has changed),
-    // and doesn't clone the repo again if the remote changed, so we need to do it manually
-    for (repo in includeGitRepos) {
-        val file = File("$rootDir/checkouts/${repo.name}")
-        if (file.isDirectory) {
-            val git = Git.open(file)
-            val sameRemote = git.remoteList().call()
-                .any { rem -> rem.urIs.any { uri -> uri.toString() == repo.uri } }
-            if (sameRemote) {
-                // the commit may have changed, fetch again
-                git.fetch().call()
-            } else {
-                // the remote changed, delete the repository and start from scratch
-                println("Git: remote for ${repo.name} changed, deleting the current folder")
-                file.deleteRecursively()
-            }
-        }
-    }
-
     gitRepositories {
         for (repo in includeGitRepos) {
             include(repo.name) {
                 uri.set(repo.uri)
-                // ESTE ES EL CAMBIO CLAVE: Para dicio-numbers, usar branch en lugar de commit
                 if (repo.name == "dicio-numbers") {
                     branch.set("master")
                 } else {
@@ -132,11 +71,11 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
                 autoInclude.set(false)
                 includeBuild("") {
                     dependencySubstitution {
-                        substitute(module("git.included.build:${repo.name}"))
-                            .using(project(repo.projectPath))
+                        substitute(module("git.included.build:${repo.name}")).using(project(repo.projectPath))
                     }
                 }
             }
         }
     }
 }
+
