@@ -1,9 +1,6 @@
 import me.champeau.gradle.igp.gitRepositories
 import org.eclipse.jgit.api.Git
 import java.io.FileInputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 import java.util.Properties
 
 rootProject.name = "Dicio"
@@ -23,7 +20,6 @@ pluginManagement {
 
 plugins {
     // need to manually read version catalog because it is not available in settings.gradle.kts
-    // this code is duplicate with the below but there is no way to avoid it...
     fun findInVersionCatalog(versionIdentifier: String): String {
         val regex = "^.*$versionIdentifier *= *\"([^\"]+)\".*$".toRegex()
         return File("gradle/libs.versions.toml")
@@ -55,7 +51,6 @@ data class IncludeGitRepo(
 )
 
 // need to manually read version catalog because it is not available in settings.gradle.kts
-// this code is duplicate with the above but there is no way to avoid it...
 fun findInVersionCatalog(versionIdentifier: String): String {
     val regex = "^.*$versionIdentifier *= *\"([^\"]+)\".*$".toRegex()
     return File("gradle/libs.versions.toml")
@@ -68,8 +63,7 @@ val includeGitRepos = listOf(
         name = "dicio-numbers",
         uri = "https://github.com/abdel-monzon/dicio-numbers",
         projectPath = ":numbers",
-        // CAMBIO IMPORTANTE: Usamos "master" en lugar de un hash específico
-        commit = "master",  // Esto hará que siempre use la última versión de la rama master
+        commit = findInVersionCatalog("dicioNumbers"),
     ),
     IncludeGitRepo(
         name = "dicio-sentences-compiler",
@@ -122,12 +116,7 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
         for (repo in includeGitRepos) {
             include(repo.name) {
                 uri.set(repo.uri)
-                // ESTE ES EL CAMBIO CLAVE: Para dicio-numbers, usar branch en lugar de commit
-                if (repo.name == "dicio-numbers") {
-                    branch.set("master")
-                } else {
-                    commit.set(repo.commit)
-                }
+                commit.set(repo.commit)
                 autoInclude.set(false)
                 includeBuild("") {
                     dependencySubstitution {
