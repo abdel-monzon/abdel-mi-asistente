@@ -25,7 +25,7 @@ plugins {
     alias(libs.plugins.dicio.unicode.cldr.plugin)
 }
 
-// ⬇️ Aplicar configuración de firma CONSTANTE
+// Configuración de firma
 apply(from = "signing.gradle")
 
 android {
@@ -53,10 +53,8 @@ android {
             applicationIdSuffix = ".$normalizedGitBranch"
             versionNameSuffix = "-$normalizedGitBranch"
 
-            val isScreenshotTest = (project.findProperty("android.testInstrumentationRunnerArguments.class") as? String)
-                ?.contains("creenshot") == true
+            val isScreenshotTest = (project.findProperty("android.testInstrumentationRunnerArguments.class") as? String)?.contains("creenshot") == true
             if (!isScreenshotTest) {
-                // only change the app name if we are not taking screenshots
                 resValue("string", "app_name", "Dicio-${gitBranch()}")
             }
         }
@@ -67,9 +65,7 @@ android {
     }
 
     compileOptions {
-        // Flag to enable support for the new language APIs
         isCoreLibraryDesugaringEnabled = true
-
         sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get())
         targetCompatibility = JavaVersion.toVersion(libs.versions.java.get())
     }
@@ -77,7 +73,7 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
-            freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
+            freeCompilerArgs.addAll(listOf("-Xannotation-default-target=param-property"))
         }
     }
 
@@ -112,9 +108,6 @@ protobuf {
     }
 }
 
-// workaround for https://github.com/google/ksp/issues/1590
-// remove when not needed anymore
-val kspKotlinRegex = "^ksp(.*)Kotlin$".toRegex()
 androidComponents {
     onVariants(selector().all()) { variant ->
         afterEvaluate {
@@ -127,8 +120,6 @@ androidComponents {
 }
 
 tasks.withType(UnicodeCldrLanguagesTask::class) {
-    // tell the UnicodeCldrLanguagesTask plugin which git commit of the
-    // https://github.com/unicode-org/cldr repo to use as a source of data
     unicodeCldrGitCommit = libs.versions.unicodeCldrGitCommit
 }
 
@@ -137,13 +128,13 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     // Dicio own libraries
-    implementation(libs.dicio.numbers)
+    implementation(project(":numbers"))  // Referencia directa al módulo numbers
     implementation(project(":skill"))
 
     // Android
     implementation(libs.appcompat)
 
-    // Compose (check out https://developer.android.com/jetpack/compose/bom/bom-mapping)
+    // Compose
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
@@ -161,9 +152,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
     androidTestImplementation(libs.hilt.android.testing)
-    //androidTestAnnotationProcessor(libs.hilt.android.compiler)
     testImplementation(libs.hilt.android.testing)
-    testAnnotationProcessor(libs.hilt.android.compiler)
 
     // Protobuf and Datastore
     implementation(libs.protobuf.kotlin.lite)
@@ -189,7 +178,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.accompanist.drawablepainter)
 
-    // Permission Flow https://github.com/PatilShreyas/permission-flow-android
+    // Permission Flow
     implementation(libs.permission.flow.android)
     implementation(libs.permission.flow.compose)
 
@@ -209,8 +198,6 @@ dependencies {
     androidTestImplementation(libs.test.ui.automator)
 }
 
-// this is required to avoid NoClassDefFoundError for ActivityInvoker during androidTest
-// https://github.com/android/android-test/issues/2247#issuecomment-2194435444
 configurations.configureEach {
     resolutionStrategy {
         force(libs.test.core)
@@ -220,3 +207,4 @@ configurations.configureEach {
 fun gitBranch(): String {
     return Git.open(rootDir).use { it.repository.branch }
 }
+
