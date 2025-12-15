@@ -1,4 +1,12 @@
-import me.champeau.gradle.igp.gitRepositories
+import me.champeau.gradient.igp.gitRepositories
+
+// Define la clase IncludeGitRepo
+data class IncludeGitRepo(
+    val name: String,
+    val uri: String,
+    val projectPath: String,
+    val commit: String
+)
 
 rootProject.name = "Dicio"
 include(":app")
@@ -16,7 +24,7 @@ pluginManagement {
 }
 
 plugins {
-    id("me.champeau.includegit") version "0.1.5"
+    id("me.champeau.gradient.igp") version "0.1.5"
 }
 
 dependencyResolutionManagement {
@@ -28,17 +36,17 @@ dependencyResolutionManagement {
 }
 
 val includeGitRepos = listOf(
-    org.stypox.dicio.IncludeGitRepo(
+    IncludeGitRepo(
         name = "dicio-numbers",
         uri = "https://github.com/abdel-monzon/dicio-numbers",
         projectPath = ":numbers",
-        commit = "master",  // Usa la rama master
+        commit = "master"  // Usa la rama master
     ),
-    org.stypox.dicio.IncludeGitRepo(
+    IncludeGitRepo(
         name = "dicio-sentences-compiler",
         uri = "https://github.com/Stypox/dicio-sentences-compiler",
         projectPath = ":sentences_compiler",
-        commit = "main",  // Cambia esto según el commit necesario
+        commit = "main"  // Cambia esto según el commit necesario
     ),
 )
 
