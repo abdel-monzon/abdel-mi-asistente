@@ -1,17 +1,11 @@
-import me.champeau.gradient.igp.gitRepositories
-
-// Define la clase IncludeGitRepo
-data class IncludeGitRepo(
-    val name: String,
-    val uri: String,
-    val projectPath: String,
-    val commit: String
-)
-
 rootProject.name = "Dicio"
 include(":app")
 include(":skill")
 include(":numbers")  // Incluye el módulo numbers
+
+// Configura el directorio del módulo numbers
+project(":numbers").projectDir = file("../dicio-numbers")
+
 includeBuild("sentences-compiler-plugin")
 includeBuild("unicode-cldr-plugin")
 
@@ -23,67 +17,11 @@ pluginManagement {
     }
 }
 
-plugins {
-    id("me.champeau.gradient.igp") version "0.1.5"
-}
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-    }
-}
-
-val includeGitRepos = listOf(
-    IncludeGitRepo(
-        name = "dicio-numbers",
-        uri = "https://github.com/abdel-monzon/dicio-numbers",
-        projectPath = ":numbers",
-        commit = "master"  // Usa la rama master
-    ),
-    IncludeGitRepo(
-        name = "dicio-sentences-compiler",
-        uri = "https://github.com/Stypox/dicio-sentences-compiler",
-        projectPath = ":sentences_compiler",
-        commit = "main"  // Cambia esto según el commit necesario
-    ),
-)
-
-val localProperties = java.util.Properties().apply {
-    try {
-        load(java.io.FileInputStream(java.io.File(rootDir, "local.properties")))
-    } catch (e: Throwable) {
-        println("Warning: can't read local.properties: $e")
-    }
-}
-
-if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
-    for (repo in includeGitRepos) {
-        includeBuild("../${repo.name}") {
-            dependencySubstitution {
-                substitute(module("git.included.build:${repo.name}")).using(project(repo.projectPath))
-            }
-        }
-    }
-} else {
-    gitRepositories {
-        for (repo in includeGitRepos) {
-            include(repo.name) {
-                uri.set(repo.uri)
-                if (repo.name == "dicio-numbers") {
-                    branch.set("master")
-                } else {
-                    commit.set(repo.commit)
-                }
-                autoInclude.set(false)
-                includeBuild("") {
-                    dependencySubstitution {
-                        substitute(module("git.included.build:${repo.name}")).using(project(repo.projectPath))
-                    }
-                }
-            }
-        }
     }
 }
 
