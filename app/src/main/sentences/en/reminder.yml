@@ -1,9 +1,8 @@
 set:
   - "remind me .text. in .time."
-  - "schedule .text. for .time. from now"
+  - "schedule .text. for .time."
   - "set a reminder for .text. in .time."
   - "in .time. remind me .text."
-  - "in .time. I want you to remind me .text."
 
 list:
   - "show my reminders"
