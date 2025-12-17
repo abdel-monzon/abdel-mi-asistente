@@ -3,14 +3,12 @@ set:
   - "agenda .text. para dentro de .time."
   - "pon un recordatorio para .text. en .time."
   - "dentro de .time. recuérdame .text."
-  - "en .time. quiero que me recuerdes .text."
 
 list:
   - "muestra mis recordatorios"
-  - "¿qué recordatorios tengo"
+  - "qué recordatorios tengo"
   - "lista de recordatorios"
 
 cancel:
   - "borra el recordatorio .index."
   - "elimina el recordatorio número .index."
-  - "cancela el recordatorio .index."
