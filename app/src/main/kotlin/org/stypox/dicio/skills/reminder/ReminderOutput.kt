@@ -4,17 +4,14 @@ import org.dicio.skill.context.SkillContext
 import org.stypox.dicio.R
 import org.stypox.dicio.io.graphical.HeadlineSpeechSkillOutput
 
-/**
- * Representa todos los tipos posibles de salida de la habilidad.
- */
 sealed class ReminderOutput : HeadlineSpeechSkillOutput {
-    /** Éxito al establecer un recordatorio */
+    
     data class SetSuccess(
         val text: String,
         val timeExpression: String
     ) : ReminderOutput() {
         override fun getSpeechOutput(ctx: SkillContext): String {
-            return ctx.androidContext.getString(
+            return ctx.android.getString(
                 R.string.skill_reminder_set_success,
                 text,
                 timeExpression
@@ -22,12 +19,11 @@ sealed class ReminderOutput : HeadlineSpeechSkillOutput {
         }
     }
     
-    /** Lista de recordatorios (puede estar vacía) */
     data class ListSuccess(
         val reminders: List<ReminderItem>
     ) : ReminderOutput() {
         override fun getSpeechOutput(ctx: SkillContext): String {
-            val context = ctx.androidContext
+            val context = ctx.android
             
             if (reminders.isEmpty()) {
                 return context.getString(R.string.skill_reminder_list_empty)
@@ -47,26 +43,23 @@ sealed class ReminderOutput : HeadlineSpeechSkillOutput {
         }
     }
     
-    /** Éxito al cancelar un recordatorio */
     data class CancelSuccess(
         val index: Int
     ) : ReminderOutput() {
         override fun getSpeechOutput(ctx: SkillContext): String {
-            return ctx.androidContext.getString(
+            return ctx.android.getString(
                 R.string.skill_reminder_cancel_success,
                 index
             )
         }
     }
     
-    /** Lista vacía (caso especial) */
     object ListEmpty : ReminderOutput() {
         override fun getSpeechOutput(ctx: SkillContext): String {
-            return ctx.androidContext.getString(R.string.skill_reminder_list_empty)
+            return ctx.android.getString(R.string.skill_reminder_list_empty)
         }
     }
     
-    /** Error genérico */
     data class Error(
         val message: String
     ) : ReminderOutput() {
@@ -74,4 +67,10 @@ sealed class ReminderOutput : HeadlineSpeechSkillOutput {
             return message
         }
     }
+    
+    data class ReminderItem(
+        val id: Int,
+        val text: String,
+        val timeRemaining: String
+    )
 }
