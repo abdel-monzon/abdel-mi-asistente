@@ -79,7 +79,6 @@ skills:
         captures:
           - id: who
             type: string
-            
   
   - id: timer
     specificity: high
@@ -143,4 +142,4 @@ skills:
       - id: cancel
         captures:
           - id: index
-            type: number
+            type: string
