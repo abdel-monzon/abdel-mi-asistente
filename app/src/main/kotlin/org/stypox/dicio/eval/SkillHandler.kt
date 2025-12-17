@@ -57,6 +57,7 @@ class SkillHandler @Inject constructor(
         JokeInfo,
         ListeningInfo(dataStore),
         TranslationInfo,
+        ReminderInfo,
     )
 
     private val fallbackSkillInfoList = listOf(
