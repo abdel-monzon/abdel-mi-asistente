@@ -1,79 +1,51 @@
 package org.stypox.dicio.skills.reminder
 
 import org.dicio.skill.context.SkillContext
-import org.dicio.skill.skill.Skill
 import org.dicio.skill.skill.SkillOutput
-import org.dicio.skill.skill.Specificity
-import org.dicio.skill.standard.StandardScore
-import org.stypox.dicio.sentences.Sentences
+import org.dicio.skill.standard.StandardRecognizerData
+import org.dicio.skill.standard.StandardRecognizerSkill
+import org.stypox.dicio.sentences.Sentences.Reminder
+import org.stypox.dicio.util.getString
 
-class ReminderSkill : Skill<ReminderInput?>(ReminderInfo, Specificity.HIGH) {
-    
-    override fun score(ctx: SkillContext, input: String): Pair<StandardScore, ReminderInput?> {
-        // 1. Obtener el reconocedor para el idioma actual
-        val recognizerData = Sentences.Reminder[ctx.sentencesLanguage]
-        
-        return if (recognizerData != null) {
-            // 2. Usar el reconocedor para evaluar la entrada
-            val result = recognizerData.score(input)
-            
-            // 3. Extraer los datos de la frase reconocida
-            val reminderInput = ReminderInput.fromStandardResult(result)
-            
-            // 4. Devolver la puntuación junto con los datos extraídos
-            Pair(result.score, reminderInput)
-        } else {
-            // Si no hay reconocedor disponible
-            Pair(StandardScore.EMPTY, null)
-        }
-    }
-    
-    override suspend fun generateOutput(ctx: SkillContext, inputData: ReminderInput?): SkillOutput {
-        // Si no se pudo interpretar la entrada
-        if (inputData == null) {
-            return ReminderOutput.Error(
-                message = ctx.androidContext.getString(
-                    org.stypox.dicio.R.string.skill_reminder_set_error_parse_time
-                )
-            )
-        }
-        
-        // Procesar según el tipo de comando
+class ReminderSkill(
+    correspondingSkillInfo: ReminderInfo,
+    data: StandardRecognizerData<Reminder>
+) : StandardRecognizerSkill<Reminder>(correspondingSkillInfo, data) {
+
+    override suspend fun generateOutput(ctx: SkillContext, inputData: Reminder): SkillOutput {
         return when (inputData) {
-            is ReminderInput.Set -> handleSetReminder(ctx, inputData)
-            is ReminderInput.List -> handleListReminders(ctx)
-            is ReminderInput.Cancel -> handleCancelReminder(ctx, inputData)
+            is Reminder.Set -> handleSetReminder(ctx, inputData)
+            is Reminder.List -> handleListReminders(ctx)
+            is Reminder.Cancel -> handleCancelReminder(ctx, inputData)
         }
     }
     
-    private fun handleSetReminder(ctx: SkillContext, input: ReminderInput.Set): ReminderOutput {
-        val context = ctx.androidContext
+    private fun handleSetReminder(ctx: SkillContext, input: Reminder.Set): SkillOutput {
+        val context = ctx.android
         
         // Validaciones básicas
-        if (input.text.isBlank()) {
+        if (input.text.isNullOrBlank()) {
             return ReminderOutput.Error(
                 message = context.getString(org.stypox.dicio.R.string.skill_reminder_set_error_no_text)
             )
         }
         
-        if (input.timeExpression.isBlank()) {
+        if (input.time.isNullOrBlank()) {
             return ReminderOutput.Error(
                 message = context.getString(org.stypox.dicio.R.string.skill_reminder_set_error_no_time)
             )
         }
         
-        // Por ahora, solo confirmamos que recibimos el comando
-        // En la Fase 2 parsearemos el tiempo y guardaremos el recordatorio
+        // Por ahora, solo confirmamos (en Fase 2 parsearemos el tiempo)
         return ReminderOutput.SetSuccess(
-            text = input.text,
-            timeExpression = input.timeExpression
+            text = input.text!!,
+            timeExpression = input.time!!
         )
     }
     
-    private fun handleListReminders(ctx: SkillContext): ReminderOutput {
+    private fun handleListReminders(ctx: SkillContext): SkillOutput {
         // Por ahora, lista vacía
-        // En la Fase 2 recuperaremos recordatorios reales de una base de datos
-        val reminders = emptyList<ReminderItem>()
+        val reminders = emptyList<ReminderOutput.ReminderItem>()
         
         return if (reminders.isEmpty()) {
             ReminderOutput.ListEmpty
@@ -82,18 +54,20 @@ class ReminderSkill : Skill<ReminderInput?>(ReminderInfo, Specificity.HIGH) {
         }
     }
     
-    private fun handleCancelReminder(ctx: SkillContext, input: ReminderInput.Cancel): ReminderOutput {
-        // Por ahora, solo confirmamos
-        // En la Fase 2 buscaremos y eliminaremos el recordatorio real
+    private fun handleCancelReminder(ctx: SkillContext, input: Reminder.Cancel): SkillOutput {
+        val index = input.index?.toIntOrNull()
+        
+        if (index == null) {
+            return ReminderOutput.Error(
+                message = ctx.android.getString(
+                    org.stypox.dicio.R.string.skill_reminder_cancel_error_no_number
+                )
+            )
+        }
+        
+        // Por ahora, solo confirmamos (en Fase 2 buscaremos y eliminaremos)
         return ReminderOutput.CancelSuccess(
-            index = input.index
+            index = index
         )
     }
 }
-
-// Datos de ejemplo para listar (se usará en la Fase 2)
-data class ReminderItem(
-    val id: Int,
-    val text: String,
-    val timeRemaining: String
-)
