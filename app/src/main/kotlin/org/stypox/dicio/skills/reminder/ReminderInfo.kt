@@ -26,6 +26,9 @@ object ReminderInfo : SkillInfo("reminder") {
     }
 
     override fun build(ctx: SkillContext): Skill<*> {
-        return ReminderSkill()
+        return ReminderSkill(
+            this,
+            Sentences.Reminder[ctx.sentencesLanguage]!!
+        )
     }
 }
