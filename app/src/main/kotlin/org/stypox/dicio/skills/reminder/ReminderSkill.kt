@@ -1,55 +1,37 @@
 package org.stypox.dicio.skills.reminder
 
-import org.dicio.skill.Skill
-import org.dicio.skill.SkillContext
-import org.dicio.skill.util.Score
-import org.stypox.dicio.Sections
-import org.stypox.dicio.R
-import org.stypox.dicio.util.Duration
-import org.stypox.dicio.util.StringUtils
+import org.dicio.skill.context.SkillContext
+import org.dicio.skill.skill.Skill
+import org.dicio.skill.skill.SkillOutput
+import org.dicio.skill.skill.Specificity
+import org.dicio.skill.standard.StandardScore
+import org.stypox.dicio.sentences.Sentences
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import kotlin.random.Random
 
-class ReminderSkill : Skill<ReminderInputData>() {
+class ReminderSkill : Skill<Unit>(ReminderInfo, Specificity.HIGH) {
 
-    override suspend fun generateOutput(
-        ctx: SkillContext,
-        inputData: ReminderInputData
-    ): ReminderOutput {
-        return when (inputData.sentenceId) {
-            "set"    -> handleSet(ctx, inputData)
-            "list"   -> handleList(ctx)
-            "cancel" -> handleCancel(ctx, inputData)
-            else     -> ReminderOutput(R.string.skill_error_unknown_intent)
+    override fun score(ctx: SkillContext, input: String): Pair<StandardScore, Unit> {
+        // 1. Obtener los datos del reconocedor para el idioma actual
+        val recognizerData = Sentences.Reminder[ctx.sentencesLanguage]
+
+        return if (recognizerData != null) {
+            // 2. Usarlo para evaluar la entrada del usuario
+            val result = recognizerData.score(input)
+
+            // 3. Devolver la puntuación junto con Unit como datos de entrada
+            Pair(result.score, Unit)
+        } else {
+            // Si no hay datos del reconocedor, devolver una puntuación vacía
+            Pair(StandardScore.EMPTY, Unit)
         }
     }
 
-    override fun score(ctx: SkillContext, input: String): Pair<Score, ReminderInputData?> {
-        val sentence = Sections.getSentence(ctx, "reminder", input) ?: return Score.MIN to null
-        return Score.MAX to ReminderInputData(
-            sentenceId = sentence.sentenceId,
-            text = sentence.getCapturingGroup("text"),
-            time = sentence.getCapturingGroup("time"),
-            index = sentence.getCapturingGroup("index")
-        )
-    }
-
-    private fun handleSet(ctx: SkillContext, data: ReminderInputData): ReminderOutput {
-        val text = data.text ?: return ReminderOutput(R.string.skill_error_missing_text)
-        val time = data.time ?: return ReminderOutput(R.string.skill_error_missing_time)
-        
-        // TODO: parsear "time" con Duration.parse() y programar WorkManager
-        return ReminderOutput(R.string.skill_reminder_set_success, text, time)
-    }
-
-    private fun handleList(ctx: SkillContext): ReminderOutput {
-        // TODO: leer de la base de datos
-        return ReminderOutput(R.string.skill_reminder_list_empty)
-    }
-
-    private fun handleCancel(ctx: SkillContext, data: ReminderInputData): ReminderOutput {
-        val idx = data.index?.toIntOrNull() ?: return ReminderOutput(R.string.skill_error_invalid_index)
-        
-        // TODO: cancelar en WorkManager y BD
-        return ReminderOutput(R.string.skill_reminder_cancel_success, idx)
+    override suspend fun generateOutput(ctx: SkillContext, inputData: Unit): SkillOutput {
+        // Por ahora, devolvemos una salida simple para probar.
+        // Más adelante implementaremos la lógica real (añadir, listar, cancelar).
+        val responseText = "La función de recordatorio está funcionando. (Por implementar: lógica para configurar, listar y cancelar recordatorios)"
+        return ReminderOutput(responseText)
     }
 }
-
