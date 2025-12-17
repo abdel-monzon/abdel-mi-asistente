@@ -129,3 +129,18 @@ skills:
             type: string
           - id: target
             type: string
+
+  - id: reminder
+    specificity: high
+    sentences:
+      - id: set
+        captures:
+          - id: time
+            type: duration
+          - id: text
+            type: string
+      - id: list
+      - id: cancel
+        captures:
+          - id: index
+            type: number
