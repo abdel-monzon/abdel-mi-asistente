@@ -235,4 +235,23 @@
     <string name="skill_translation_to">a</string>
     <string name="skill_name_joke">Chistes</string>
     <string name="skill_sentence_example_joke">Cuéntame un chiste</string>
+    <string name="skill_name_reminder">Recordatorios</string>
+    <string name="skill_sentence_example_reminder">Recuérdame comprar leche en 2 horas</string>
+    <string name="skill_reminder_set">Recordar</string>
+    <string name="skill_reminder_list">Mostrar recordatorios</string>
+    <string name="skill_reminder_cancel">Cancelar recordatorio</string>
+    <string name="skill_reminder_set_success">Recordatorio configurado: "%1$s" en %2$s</string>
+    <string name="skill_reminder_set_error_no_text">No especificaste qué recordar</string>
+    <string name="skill_reminder_set_error_no_time">No especificaste cuándo recordarte</string>
+    <string name="skill_reminder_set_error_parse_time">No entendí el tiempo. Intenta algo como "en 2 horas"</string>
+    <string name="skill_reminder_list_empty">No tienes recordatorios pendientes</string>
+    <string name="skill_reminder_list_header">Tus recordatorios:</string>
+    <string name="skill_reminder_list_item">%1$d. %2$s - %3$s</string>
+    <string name="skill_reminder_cancel_success">Recordatorio %1$d cancelado</string>
+    <string name="skill_reminder_cancel_error">No encontré ese recordatorio</string>
+    <string name="skill_reminder_cancel_error_no_number">Por favor di un número, ejemplo: "cancela el recordatorio 1"</string>
+    <string name="skill_reminder_time_hours">%d horas</string>
+    <string name="skill_reminder_time_minutes">%d minutos</string>
+    <string name="skill_reminder_time_seconds">%d segundos</string>
+    <string name="skill_reminder_time_now">ahora</string>
 </resources>
