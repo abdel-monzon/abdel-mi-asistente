@@ -1,14 +1,10 @@
-
 package org.stypox.dicio.skills.reminder
 
 import org.dicio.skill.Skill
 import org.dicio.skill.SkillContext
-import org.dicio.skill.SkillInfo
-import org.dicio.skill.SkillOutput
-import org.dicio.skill.StandardResult
-import org.dicio.skill.util.SentenceInfo
 import org.dicio.skill.util.Score
 import org.stypox.dicio.Sections
+import org.stypox.dicio.R
 import org.stypox.dicio.util.Duration
 import org.stypox.dicio.util.StringUtils
 
@@ -17,12 +13,12 @@ class ReminderSkill : Skill<ReminderInputData>() {
     override suspend fun generateOutput(
         ctx: SkillContext,
         inputData: ReminderInputData
-    ): SkillOutput {
+    ): ReminderOutput {
         return when (inputData.sentenceId) {
             "set"    -> handleSet(ctx, inputData)
             "list"   -> handleList(ctx)
             "cancel" -> handleCancel(ctx, inputData)
-            else     -> StandardResult.error("Unknown intent")
+            else     -> ReminderOutput(R.string.skill_error_unknown_intent)
         }
     }
 
@@ -36,19 +32,24 @@ class ReminderSkill : Skill<ReminderInputData>() {
         )
     }
 
-    /* ---------- handlers privados ---------- */
-    private fun handleSet(ctx: SkillContext, data: ReminderInputData): SkillOutput {
-        // TODO: parsear *time* y programar WorkManager
-        return StandardResult.success("Recordatorio guardado: “${data.text}”")
+    private fun handleSet(ctx: SkillContext, data: ReminderInputData): ReminderOutput {
+        val text = data.text ?: return ReminderOutput(R.string.skill_error_missing_text)
+        val time = data.time ?: return ReminderOutput(R.string.skill_error_missing_time)
+        
+        // TODO: parsear "time" con Duration.parse() y programar WorkManager
+        return ReminderOutput(R.string.skill_reminder_set_success, text, time)
     }
 
-    private fun handleList(ctx: SkillContext): SkillOutput {
-        // TODO: leer lista de BD/SharedPrefs
-        return StandardResult.success("No hay recordatorios activos.")
+    private fun handleList(ctx: SkillContext): ReminderOutput {
+        // TODO: leer de la base de datos
+        return ReminderOutput(R.string.skill_reminder_list_empty)
     }
 
-    private fun handleCancel(ctx: SkillContext, data: ReminderInputData): SkillOutput {
-        // TODO: cancelar por *index*
-        return StandardResult.success("Recordatorio cancelado.")
+    private fun handleCancel(ctx: SkillContext, data: ReminderInputData): ReminderOutput {
+        val idx = data.index?.toIntOrNull() ?: return ReminderOutput(R.string.skill_error_invalid_index)
+        
+        // TODO: cancelar en WorkManager y BD
+        return ReminderOutput(R.string.skill_reminder_cancel_success, idx)
     }
 }
+
