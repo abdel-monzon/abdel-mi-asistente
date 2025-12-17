@@ -5,33 +5,44 @@ import org.dicio.skill.skill.Skill
 import org.dicio.skill.skill.SkillOutput
 import org.dicio.skill.skill.Specificity
 import org.dicio.skill.standard.StandardScore
-import org.stypox.dicio.sentences.Sentences
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 
 class ReminderSkill : Skill<Unit>(ReminderInfo, Specificity.HIGH) {
-
+    
     override fun score(ctx: SkillContext, input: String): Pair<StandardScore, Unit> {
-        // 1. Obtener los datos del reconocedor para el idioma actual
-        val recognizerData = Sentences.Reminder[ctx.sentencesLanguage]
-
-        return if (recognizerData != null) {
-            // 2. Usarlo para evaluar la entrada del usuario
-            val result = recognizerData.score(input)
-
-            // 3. Devolver la puntuación junto con Unit como datos de entrada
-            Pair(result.score, Unit)
+        // Detectar si la entrada es sobre recordatorios (igual que AgeSkill hace para "age")
+        val reminderKeywords = listOf("remind", "recordar", "recordatorio", "recuerda", 
+                                      "alarma", "reminder", "schedule", "agenda", 
+                                      "cancel", "borrar", "eliminar", "list", "lista", 
+                                      "muestra", "show", "avísame", "notifica")
+        val containsReminderWord = reminderKeywords.any { keyword -> 
+            input.contains(keyword, ignoreCase = true) 
+        }
+        
+        return if (containsReminderWord) {
+            // Score alto cuando detecta palabras relacionadas con recordatorios
+            Pair(StandardScore(
+                userMatched = 1.0f,
+                userWeight = 1.0f, 
+                refMatched = 1.0f,
+                refWeight = 1.0f,
+                capturingGroups = null
+            ), Unit)
         } else {
-            // Si no hay datos del reconocedor, devolver una puntuación vacía
+            // Score bajo cuando no detecta palabras relacionadas
             Pair(StandardScore.EMPTY, Unit)
         }
     }
-
+    
     override suspend fun generateOutput(ctx: SkillContext, inputData: Unit): SkillOutput {
         // Por ahora, devolvemos una salida simple para probar.
-        // Más adelante implementaremos la lógica real (añadir, listar, cancelar).
-        val responseText = "La función de recordatorio está funcionando. (Por implementar: lógica para configurar, listar y cancelar recordatorios)"
-        return ReminderOutput(responseText)
+        // La lógica real para procesar "set", "list", "cancel" se implementará después.
+        val responses = listOf(
+            "He recibido tu solicitud de recordatorio. (Función en desarrollo)",
+            "Los recordatorios estarán disponibles pronto.",
+            "Entendí que quieres un recordatorio. Trabajando en ello..."
+        )
+        val randomResponse = responses[Random.nextInt(responses.size)]
+        return ReminderOutput(randomResponse)
     }
 }
