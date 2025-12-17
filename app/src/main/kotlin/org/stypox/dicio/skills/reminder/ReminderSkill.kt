@@ -4,6 +4,7 @@ import android.content.Context
 import kotlinx.coroutines.runBlocking
 import org.dicio.numbers.parser.Parser
 import org.dicio.numbers.util.Duration
+import org.stypox.dicio.R
 import org.stypox.dicio.Sections
 import org.stypox.dicio.skill.reminder.ReminderManager
 import java.time.LocalDateTime
@@ -11,15 +12,15 @@ import java.time.LocalDateTime
 class ReminderSkill : StandardSkill() {
     private lateinit var manager: ReminderManager
     private lateinit var parser: Parser
+    private lateinit var context: Context
     
     override fun setInput(input: String, result: StandardResult) {
-        val context = getContext()
+        context = getContext()
         manager = ReminderManager(context)
         
-        // Obtener parser desde ParserFormatter (debe estar ya configurado)
         val parserFormatter = Sections.getParserFormatter()
         parser = parserFormatter?.parser ?: run {
-            setOutput(StandardOutput("Error: No hay parser configurado"))
+            setOutput(StandardOutput(context.getString(R.string.skill_reminder_set_error_parse_time)))
             return
         }
         
@@ -32,36 +33,34 @@ class ReminderSkill : StandardSkill() {
     
     private fun handleSetReminder(input: String, result: StandardResult) {
         val text = result.getCapturingGroup("text") ?: run {
-            setOutput(StandardOutput("¿Qué quieres que te recuerde?"))
+            setOutput(StandardOutput(context.getString(R.string.skill_reminder_set_error_no_text)))
             return
         }
         
         val timeExpression = result.getCapturingGroup("time") ?: run {
-            setOutput(StandardOutput("¿Cuándo quieres que te lo recuerde?"))
+            setOutput(StandardOutput(context.getString(R.string.skill_reminder_set_error_no_time)))
             return
         }
         
         runBlocking {
             try {
-                // Parsear duración usando dicio-numbers
                 val duration: Duration = parser.parseDuration(timeExpression)
                     .orElseThrow { IllegalArgumentException("No se pudo parsear el tiempo") }
                 
-                // Convertir a milisegundos
                 val triggerInMillis = (duration.toSeconds() * 1000).toLong()
-                
-                // Agregar recordatorio
                 val id = manager.addReminder(text, triggerInMillis)
                 
-                setOutput(StandardOutput(
-                    "✅ Recordatorio configurado: \"$text\" ${formatDuration(duration)}"
-                ))
+                val timeFormatted = formatDuration(duration)
+                val successMessage = context.getString(
+                    R.string.skill_reminder_set_success,
+                    text,
+                    timeFormatted
+                )
+                
+                setOutput(StandardOutput(successMessage))
                 
             } catch (e: Exception) {
-                setOutput(StandardOutput(
-                    "❌ No entendí el tiempo. Intenta algo como: " +
-                    "\"recuérdame comprar leche en 2 horas\""
-                ))
+                setOutput(StandardOutput(context.getString(R.string.skill_reminder_set_error_parse_time)))
             }
         }
     }
@@ -69,48 +68,70 @@ class ReminderSkill : StandardSkill() {
     private fun handleListReminders() {
         manager.getAllReminders { reminders ->
             if (reminders.isEmpty()) {
-                setOutput(StandardOutput("📭 No tienes recordatorios pendientes"))
+                setOutput(StandardOutput(context.getString(R.string.skill_reminder_list_empty)))
                 return@getAllReminders
             }
             
-            val response = StringBuilder("📋 Tus recordatorios:\n")
-            reminders.forEachIndexed { index, reminder ->
-                response.append("${index + 1}. ${reminder.text} - ${reminder.getTimeRemaining()}\n")
-            }
+            val header = context.getString(R.string.skill_reminder_list_header) + "\n"
+            val items = reminders.mapIndexed { index, reminder ->
+                context.getString(
+                    R.string.skill_reminder_list_item,
+                    index + 1,
+                    reminder.text,
+                    reminder.getTimeRemaining()
+                )
+            }.joinToString("\n")
             
-            setOutput(StandardOutput(response.toString()))
+            setOutput(StandardOutput(header + items))
         }
     }
     
     private fun handleCancelReminder(result: StandardResult) {
         val indexStr = result.getCapturingGroup("index") ?: run {
-            setOutput(StandardOutput("¿Qué recordatorio quieres cancelar?"))
+            setOutput(StandardOutput(context.getString(R.string.skill_reminder_cancel_error_no_number)))
             return
         }
         
         runBlocking {
             try {
-                val index = indexStr.toInt() - 1  // Convertir a índice 0-based
+                val index = indexStr.toInt() - 1
                 manager.getAllReminders { reminders ->
                     if (index in reminders.indices) {
                         val reminder = reminders[index]
                         manager.cancelReminder(reminder.id)
-                        setOutput(StandardOutput("🗑️ Recordatorio \"${reminder.text}\" cancelado"))
+                        val message = context.getString(
+                            R.string.skill_reminder_cancel_success,
+                            index + 1
+                        )
+                        setOutput(StandardOutput(message))
                     } else {
-                        setOutput(StandardOutput("❌ No encontré ese recordatorio"))
+                        setOutput(StandardOutput(context.getString(R.string.skill_reminder_cancel_error)))
                     }
                 }
             } catch (e: NumberFormatException) {
-                setOutput(StandardOutput("❌ Por favor di un número, ejemplo: \"cancela el recordatorio 1\""))
+                setOutput(StandardOutput(context.getString(R.string.skill_reminder_cancel_error_no_number)))
             }
         }
     }
     
     private fun formatDuration(duration: Duration): String {
         return when {
-            duration.toHours() >= 1 -> "en ${duration.toHours().toInt()} horas"
-            duration.toMinutes() >= 1 -> "en ${duration.toMinutes().toInt()} minutos"
-            else -> "en ${duration.toSeconds().toInt()} segundos"
+            duration.toHours() >= 1 -> {
+                val hours = duration.toHours().toInt()
+                context.getString(R.string.skill_reminder_time_hours, hours)
+            }
+            duration.toMinutes() >= 1 -> {
+                val minutes = duration.toMinutes().toInt()
+                context.getString(R.string.skill_reminder_time_minutes, minutes)
+            }
+            else -> {
+                val seconds = duration.toSeconds().toInt()
+                if (seconds > 0) {
+                    context.getString(R.string.skill_reminder_time_seconds, seconds)
+                } else {
+                    context.getString(R.string.skill_reminder_time_now)
+                }
+            }
         }
     }
 }
