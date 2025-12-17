@@ -1,21 +1,13 @@
 package org.stypox.dicio.skills.reminder
 
-import org.dicio.skill.SkillContext
-import org.dicio.skill.SkillOutput
-import org.dicio.skill.util.CleanableUp
-import org.stypox.dicio.util.getString
+import org.dicio.skill.context.SkillContext
+import org.stypox.dicio.io.graphical.HeadlineSpeechSkillOutput
 
-class ReminderOutput(
-    private val messageResource: Int,
-    private vararg val formatArgs: Any
-) : SkillOutput, CleanableUp {
+class ReminderOutput(private val speechText: String) : HeadlineSpeechSkillOutput {
 
-    override suspend fun generate(ctx: SkillContext): String {
-        return ctx.getString(messageResource, *formatArgs)
-    }
-
-    override fun cleanup() {
-        // Aquí cancelarías WorkManager si fuera necesario
+    override fun getSpeechOutput(ctx: SkillContext): String {
+        // Simplemente devuelve el texto que se pasó en el constructor.
+        // Más adelante podrás expandir esto para manejar diferentes tipos de salida.
+        return speechText
     }
 }
-
