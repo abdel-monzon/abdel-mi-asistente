@@ -34,6 +34,7 @@ import org.stypox.dicio.skills.joke.JokeInfo
 import javax.inject.Inject
 import javax.inject.Singleton
 import org.stypox.dicio.skills.age.AgeInfo
+import org.stypox.dicio.skills.reminder.ReminderInfo
 
 @Singleton
 class SkillHandler @Inject constructor(
@@ -55,9 +56,9 @@ class SkillHandler @Inject constructor(
         AgeInfo,
         MediaInfo,
         JokeInfo,
+        ReminderInfo,
         ListeningInfo(dataStore),
         TranslationInfo,
-        ReminderInfo,
     )
 
     private val fallbackSkillInfoList = listOf(
