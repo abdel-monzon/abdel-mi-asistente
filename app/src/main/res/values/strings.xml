@@ -248,4 +248,23 @@
     <string name="skill_age_name">Age Calculator</string>
     <string name="skill_age_example">How long have I lived?</string>
     <string name="skill_translation_auto">Auto</string>
+    <string name="skill_name_reminder">Reminders</string>
+    <string name="skill_sentence_example_reminder">Remind me to buy milk in 2 hours</string>
+    <string name="skill_reminder_set">Remind me</string>
+    <string name="skill_reminder_list">Show reminders</string>
+    <string name="skill_reminder_cancel">Cancel reminder</string>
+    <string name="skill_reminder_set_success">Reminder set: "%1$s" in %2$s</string>
+    <string name="skill_reminder_set_error_no_text">You didn\'t specify what to remember</string>
+    <string name="skill_reminder_set_error_no_time">You didn\'t specify when to remind you</string>
+    <string name="skill_reminder_set_error_parse_time">I didn\'t understand the time. Try something like "in 2 hours"</string>
+    <string name="skill_reminder_list_empty">You have no pending reminders</string>
+    <string name="skill_reminder_list_header">Your reminders:</string>
+    <string name="skill_reminder_list_item">%1$d. %2$s - %3$s</string>
+    <string name="skill_reminder_cancel_success">Reminder %1$d cancelled</string>
+    <string name="skill_reminder_cancel_error">I couldn\'t find that reminder</string>
+    <string name="skill_reminder_cancel_error_no_number">Please say a number, for example: "cancel reminder 1"</string>
+    <string name="skill_reminder_time_hours">%d hours</string>
+    <string name="skill_reminder_time_minutes">%d minutes</string>
+    <string name="skill_reminder_time_seconds">%d seconds</string>
+    <string name="skill_reminder_time_now">now</string>
 </resources>
