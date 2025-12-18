@@ -41,6 +41,9 @@ permissionFlow = "2.1.0"
 minSdk = "21"
 targetSdk = "36"
 compileSdk = "36"
+androidx-room = "2.6.1"
+androidx-work = "2.9.0"
+threetenabp = "1.4.6"
 
 [libraries]
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanist" }
@@ -96,6 +99,11 @@ vosk-android = { module = "com.alphacephei:vosk-android", version.ref = "voskAnd
 litert = { module = "com.google.ai.edge.litert:litert", version.ref = "litert" }
 permission-flow-android = { module = "dev.shreyaspatil.permission-flow:permission-flow-android", version.ref = "permissionFlow" }
 permission-flow-compose = { module = "dev.shreyaspatil.permission-flow:permission-flow-compose", version.ref = "permissionFlow" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
+threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "gradle" }
