@@ -1,34 +1,15 @@
 package org.stypox.dicio.skills.reminder
 
-import android.content.Context
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import org.dicio.skill.context.SkillContext
-import org.dicio.skill.skill.Skill
-import org.dicio.skill.skill.SkillInfo
+import org.dicio.skill.SkillInfo
+import org.dicio.skill.SkillType
 import org.stypox.dicio.R
-import org.stypox.dicio.sentences.Sentences
 
-object ReminderInfo : SkillInfo("reminder") {
-    override fun name(context: Context): String = 
-        context.getString(R.string.skill_name_reminder)
+object ReminderInfo : SkillInfo(
+    id = "reminder",
+    nameRes = R.string.skill_name_reminder,
+    sentenceExampleRes = R.string.skill_sentence_example_reminder,
+    iconRes = R.drawable.ic_alarm,
+    needsData = false,
+    skillType = SkillType.DYNAMIC
+)
 
-    override fun sentenceExample(context: Context): String = 
-        context.getString(R.string.skill_sentence_example_reminder)
-
-    @Composable
-    override fun icon() = rememberVectorPainter(Icons.Default.Alarm)
-
-    override fun isAvailable(ctx: SkillContext): Boolean {
-        return Sentences.Reminder[ctx.sentencesLanguage] != null
-    }
-
-    override fun build(ctx: SkillContext): Skill<*> {
-        return ReminderSkill(
-            this,
-            Sentences.Reminder[ctx.sentencesLanguage]!!
-        )
-    }
-}
