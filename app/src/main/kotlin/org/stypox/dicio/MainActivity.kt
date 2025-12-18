@@ -1,6 +1,8 @@
 package org.stypox.dicio
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.Intent.ACTION_ASSIST
 import android.content.Intent.ACTION_VOICE_COMMAND
@@ -13,7 +15,16 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shreyaspatil.permissionFlow.PermissionFlow
 import kotlinx.coroutines.Job
@@ -30,10 +41,12 @@ import org.stypox.dicio.io.wake.WakeService
 import org.stypox.dicio.io.wake.WakeState.Loaded
 import org.stypox.dicio.io.wake.WakeState.Loading
 import org.stypox.dicio.io.wake.WakeState.NotLoaded
+import org.stypox.dicio.skills.reminder.ReminderWorker
 import org.stypox.dicio.ui.home.wakeWordPermissions
 import org.stypox.dicio.ui.nav.Navigation
 import org.stypox.dicio.util.BaseActivity
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -48,6 +61,7 @@ class MainActivity : BaseActivity() {
 
     private var sttPermissionJob: Job? = null
     private var wakeServiceJob: Job? = null
+    private var reminderWorkerJob: Job? = null
 
     private var nextAssistAllowed = Instant.MIN
 
@@ -111,6 +125,15 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         isCreated += 1
 
+        // ✅ INICIALIZAR THREETENABP PARA MANEJAR FECHAS/HORAS
+        AndroidThreeTen.init(this)
+
+        // ✅ CREAR CANAL DE NOTIFICACIONES PARA RECORDATORIOS
+        createReminderNotificationChannel()
+
+        // ✅ PROGRAMAR TRABAJO PERIÓDICO DE RECORDATORIOS
+        scheduleReminderWorker()
+
         handleWakeWordTurnOnScreen(intent)
         if (isAssistIntent(intent)) {
             onAssistIntentReceived()
@@ -165,8 +188,83 @@ class MainActivity : BaseActivity() {
         // the wake word service remains active in the background,
         // so we need to release resources that it does not need manually
         sttInputDevice.reinitializeToReleaseResources()
+        
+        // Cancelar trabajos
+        reminderWorkerJob?.cancel()
+        
         isCreated -= 1
         super.onDestroy()
+    }
+
+    /**
+     * ✅ CREAR CANAL DE NOTIFICACIONES PARA RECORDATORIOS
+     * Necesario para Android 8.0 (API 26) en adelante
+     */
+    private fun createReminderNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.reminder_channel_name)
+            val descriptionText = getString(R.string.reminder_channel_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(ReminderWorker.CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+                enableLights(true)
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 500, 250, 500)
+            }
+            
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    /**
+     * ✅ PROGRAMAR TRABAJO PERIÓDICO CON WORKMANAGER
+     * Verifica recordatorios cada 15 minutos (mínimo permitido por Android)
+     */
+    private fun scheduleReminderWorker() {
+        reminderWorkerJob = lifecycleScope.launch {
+            try {
+                val constraints = Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+                    .setRequiresBatteryNotLow(false)
+                    .setRequiresCharging(false)
+                    .build()
+
+                val periodicWorkRequest: PeriodicWorkRequest = 
+                    PeriodicWorkRequestBuilder<ReminderWorker>(
+                        15, // Cada 15 minutos (mínimo de Android)
+                        TimeUnit.MINUTES
+                    )
+                    .setConstraints(constraints)
+                    .addTag("reminder_periodic")
+                    .build()
+
+                WorkManager.getInstance(this@MainActivity).enqueueUniquePeriodicWork(
+                    "reminder_periodic_work",
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    periodicWorkRequest
+                )
+                
+                Log.d(TAG, "ReminderWorker programado correctamente")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error al programar ReminderWorker: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * ✅ MOSTRAR NOTIFICACIÓN DE PRUEBA (opcional para testear)
+     */
+    fun showTestReminderNotification() {
+        val notification = NotificationCompat.Builder(this, ReminderWorker.CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle("Prueba de Recordatorio")
+            .setContentText("¡Funciona! El sistema de recordatorios está activo.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .build()
+
+        NotificationManagerCompat.from(this).notify(999, notification)
     }
 
     companion object {
