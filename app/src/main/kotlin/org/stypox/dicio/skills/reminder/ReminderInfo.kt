@@ -12,3 +12,4 @@ object ReminderInfo : SkillInfo(
     needsData = false,
     skillType = SkillType.DYNAMIC
 )
+
