@@ -8,3 +8,4 @@ data class ReminderInputData(
     val time: String?,
     val index: String?
 ) : SkillData
+
