@@ -267,4 +267,7 @@
     <string name="skill_reminder_time_minutes">%d minutes</string>
     <string name="skill_reminder_time_seconds">%d seconds</string>
     <string name="skill_reminder_time_now">now</string>
+    <string name="reminder_channel_name">Recordatorios</string>
+    <string name="reminder_channel_description">Notificaciones para tus recordatorios</string>
+    <string name="notification_reminder_title">Recordatorio</string>
 </resources>
