@@ -1,16 +1,30 @@
 package org.stypox.dicio.skills.reminder
 
+import android.content.Context
+import androidx.work.*
+import kotlinx.coroutines.flow.first
 import org.dicio.skill.context.SkillContext
 import org.dicio.skill.skill.SkillOutput
 import org.dicio.skill.standard.StandardRecognizerData
 import org.dicio.skill.standard.StandardRecognizerSkill
 import org.stypox.dicio.sentences.Sentences.Reminder
-import org.stypox.dicio.util.getString
+import java.time.Duration
+import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 class ReminderSkill(
     correspondingSkillInfo: ReminderInfo,
     data: StandardRecognizerData<Reminder>
 ) : StandardRecognizerSkill<Reminder>(correspondingSkillInfo, data) {
+
+    private lateinit var repository: ReminderRepository
+    private lateinit var workManager: WorkManager
+
+    override suspend fun setup(context: SkillContext) {
+        super.setup(context)
+        repository = ReminderRepository(context.android)
+        workManager = WorkManager.getInstance(context.android)
+    }
 
     override suspend fun generateOutput(ctx: SkillContext, inputData: Reminder): SkillOutput {
         return when (inputData) {
@@ -20,10 +34,9 @@ class ReminderSkill(
         }
     }
     
-    private fun handleSetReminder(ctx: SkillContext, input: Reminder.Set): SkillOutput {
+    private suspend fun handleSetReminder(ctx: SkillContext, input: Reminder.Set): SkillOutput {
         val context = ctx.android
         
-        // Validaciones básicas
         if (input.text.isNullOrBlank()) {
             return ReminderOutput.Error(
                 message = context.getString(org.stypox.dicio.R.string.skill_reminder_set_error_no_text)
@@ -36,25 +49,48 @@ class ReminderSkill(
             )
         }
         
-        // Por ahora, solo confirmamos (en Fase 2 parsearemos el tiempo)
+        // Parsear tiempo natural
+        val reminderTime = TimeParser.parseTimeExpression(input.time!!)
+        
+        if (reminderTime == null) {
+            return ReminderOutput.Error(
+                message = "No entendí el tiempo: '${input.time}'. Prueba diciendo 'en 2 horas' o 'mañana a las 3'"
+            )
+        }
+        
+        // Guardar en base de datos
+        val id = repository.addReminder(input.text!!, reminderTime)
+        
+        // Programar alarma con WorkManager
+        scheduleReminderWork(context, id, input.text!!, reminderTime)
+        
+        // Formatear tiempo restante para respuesta
+        val timeRemaining = repository.formatTimeRemaining(reminderTime)
+        
         return ReminderOutput.SetSuccess(
             text = input.text!!,
-            timeExpression = input.time!!
+            timeRemaining = timeRemaining
         )
     }
     
-    private fun handleListReminders(ctx: SkillContext): SkillOutput {
-        // Por ahora, lista vacía
-        val reminders = emptyList<ReminderOutput.ReminderItem>()
+    private suspend fun handleListReminders(ctx: SkillContext): SkillOutput {
+        val reminders = repository.getAllActiveReminders().first()
         
         return if (reminders.isEmpty()) {
             ReminderOutput.ListEmpty
         } else {
-            ReminderOutput.ListSuccess(reminders)
+            val reminderItems = reminders.map { reminder ->
+                ReminderOutput.ReminderItem(
+                    id = reminder.id,
+                    text = reminder.text,
+                    timeRemaining = repository.formatTimeRemaining(reminder.timestamp)
+                )
+            }
+            ReminderOutput.ListSuccess(reminderItems)
         }
     }
     
-    private fun handleCancelReminder(ctx: SkillContext, input: Reminder.Cancel): SkillOutput {
+    private suspend fun handleCancelReminder(ctx: SkillContext, input: Reminder.Cancel): SkillOutput {
         val index = input.index?.toIntOrNull()
         
         if (index == null) {
@@ -65,9 +101,53 @@ class ReminderSkill(
             )
         }
         
-        // Por ahora, solo confirmamos (en Fase 2 buscaremos y eliminaremos)
-        return ReminderOutput.CancelSuccess(
-            index = index
-        )
+        val reminder = repository.getReminderById(index)
+        if (reminder == null) {
+            return ReminderOutput.Error(
+                message = "No encontré el recordatorio número $index"
+            )
+        }
+        
+        // Cancelar en base de datos
+        repository.cancelReminder(index)
+        
+        // Cancelar trabajo de WorkManager
+        workManager.cancelUniqueWork("reminder_$index")
+        
+        return ReminderOutput.CancelSuccess(index = index)
+    }
+    
+    private fun scheduleReminderWork(
+        context: Context,
+        reminderId: Long,
+        text: String,
+        timestamp: Instant
+    ) {
+        val delay = Duration.between(Instant.now(), timestamp).seconds
+        
+        if (delay > 0) {
+            val constraints = Constraints.Builder()
+                .setRequiresCharging(false)
+                .setRequiresBatteryNotLow(true)
+                .build()
+            
+            val inputData = Data.Builder()
+                .putLong("REMINDER_ID", reminderId)
+                .putString("REMINDER_TEXT", text)
+                .build()
+            
+            val reminderWork = OneTimeWorkRequestBuilder<ReminderWorker>()
+                .setInitialDelay(delay, TimeUnit.SECONDS)
+                .setConstraints(constraints)
+                .setInputData(inputData)
+                .addTag("reminder_$reminderId")
+                .build()
+            
+            workManager.enqueueUniqueWork(
+                "reminder_$reminderId",
+                ExistingWorkPolicy.REPLACE,
+                reminderWork
+            )
+        }
     }
 }
