@@ -1,3 +1,4 @@
+
 package org.stypox.dicio.skills.reminder
 
 import org.dicio.skill.SkillInfo
@@ -12,4 +13,3 @@ object ReminderInfo : SkillInfo(
     needsData = false,
     skillType = SkillType.DYNAMIC
 )
-
