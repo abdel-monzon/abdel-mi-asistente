@@ -1,3 +1,4 @@
+
 package org.stypox.dicio.skills.reminder
 
 import org.dicio.skill.SkillData
@@ -8,4 +9,3 @@ data class ReminderInputData(
     val time: String?,
     val index: String?
 ) : SkillData
-
