@@ -36,3 +36,4 @@ class ReminderSkill : Skill<ReminderInputData>() {
         )
     }
 }
+
