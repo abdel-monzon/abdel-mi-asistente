@@ -49,14 +49,13 @@ android {
 
     buildTypes {
         debug {
-            var normalizedGitBranch = gitBranch().replaceFirst("^[^A-Za-z]+", "").replace(Regex("[^0-9A-Za-z]+"), "")
+            val normalizedGitBranch = gitBranch().replaceFirst("^[^A-Za-z]+", "").replace(Regex("[^0-9A-Za-z]+"), "")
             applicationIdSuffix = ".$normalizedGitBranch"
             versionNameSuffix = "-$normalizedGitBranch"
 
             val isScreenshotTest = (project.findProperty("android.testInstrumentationRunnerArguments.class") as? String)
                 ?.contains("creenshot") == true
             if (!isScreenshotTest) {
-                // only change the app name if we are not taking screenshots
                 resValue("string", "app_name", "Dicio-${gitBranch()}")
             }
         }
@@ -67,9 +66,7 @@ android {
     }
 
     compileOptions {
-        // Flag to enable support for the new language APIs
         isCoreLibraryDesugaringEnabled = true
-
         sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get())
         targetCompatibility = JavaVersion.toVersion(libs.versions.java.get())
     }
@@ -100,12 +97,8 @@ protobuf {
         generateProtoTasks {
             all().forEach {
                 it.builtins {
-                    create("kotlin") {
-                        option("lite")
-                    }
-                    create("java") {
-                        option("lite")
-                    }
+                    create("kotlin") { option("lite") }
+                    create("java") { option("lite") }
                 }
             }
         }
@@ -113,7 +106,6 @@ protobuf {
 }
 
 // workaround for https://github.com/google/ksp/issues/1590
-// remove when not needed anymore
 val kspKotlinRegex = "^ksp(.*)Kotlin$".toRegex()
 androidComponents {
     onVariants(selector().all()) { variant ->
@@ -127,23 +119,25 @@ androidComponents {
 }
 
 tasks.withType(UnicodeCldrLanguagesTask::class) {
-    // tell the UnicodeCldrLanguagesTask plugin which git commit of the
-    // https://github.com/unicode-org/cldr repo to use as a source of data
     unicodeCldrGitCommit = libs.versions.unicodeCldrGitCommit
-    // El plugin no tiene una propiedad 'includeLanguages' pública.
-    // Procesa idiomas según los datos CLDR disponibles.
 }
 
 dependencies {
-    // ✅ PARA RECORDATORIOS - FASE 2
+    // -----------------------------------------------------------
+    // ✅ RECORDATORIOS - DEPENDENCIAS NECESARIAS
+    // -----------------------------------------------------------
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-    
+
     implementation(libs.androidx.work.runtime.ktx)
-    
+
+    // 👇 ESTA ES LA QUE FALTABA - Hilt + WorkManager
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    ksp("androidx.hilt:hilt-compiler:1.0.0")
+
     implementation(libs.threetenabp)
-    
+
     // Desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
@@ -154,7 +148,7 @@ dependencies {
     // Android
     implementation(libs.appcompat)
 
-    // Compose (check out https://developer.android.com/jetpack/compose/bom/bom-mapping)
+    // Compose
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
@@ -172,7 +166,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
     androidTestImplementation(libs.hilt.android.testing)
-    //androidTestAnnotationProcessor(libs.hilt.android.compiler)
     testImplementation(libs.hilt.android.testing)
     testAnnotationProcessor(libs.hilt.android.compiler)
 
@@ -200,7 +193,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.accompanist.drawablepainter)
 
-    // Permission Flow https://github.com/PatilShreyas/permission-flow-android
+    // Permission Flow
     implementation(libs.permission.flow.android)
     implementation(libs.permission.flow.compose)
 
@@ -220,8 +213,7 @@ dependencies {
     androidTestImplementation(libs.test.ui.automator)
 }
 
-// this is required to avoid NoClassDefFoundError for ActivityInvoker during androidTest
-// https://github.com/android/android-test/issues/2247#issuecomment-2194435444
+// Required to avoid NoClassDefFoundError for ActivityInvoker during androidTest
 configurations.configureEach {
     resolutionStrategy {
         force(libs.test.core)
@@ -231,3 +223,4 @@ configurations.configureEach {
 fun gitBranch(): String {
     return Git.open(rootDir).use { it.repository.branch }
 }
+
