@@ -135,6 +135,15 @@ tasks.withType(UnicodeCldrLanguagesTask::class) {
 }
 
 dependencies {
+    // ✅ PARA RECORDATORIOS - FASE 2
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    
+    implementation(libs.androidx.work.runtime.ktx)
+    
+    implementation(libs.threetenabp)
+    
     // Desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
