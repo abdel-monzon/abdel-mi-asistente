@@ -8,13 +8,13 @@ sealed class ReminderOutput : HeadlineSpeechSkillOutput {
     
     data class SetSuccess(
         val text: String,
-        val timeExpression: String
+        val timeRemaining: String  // Cambiado de timeExpression a timeRemaining
     ) : ReminderOutput() {
         override fun getSpeechOutput(ctx: SkillContext): String {
             return ctx.android.getString(
                 R.string.skill_reminder_set_success,
                 text,
-                timeExpression
+                timeRemaining
             )
         }
     }
