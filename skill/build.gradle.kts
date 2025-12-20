@@ -1,9 +1,8 @@
-
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.com.android.library)
-    // ✅ AGREGA estas dos líneas (son NECESARIAS):
+    // ✅ PLUGINS NECESARIOS AGREGADOS
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
     id("maven-publish")
