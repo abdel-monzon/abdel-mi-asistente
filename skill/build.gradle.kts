@@ -3,7 +3,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.com.android.library)
-    // SOLO library y maven-publish, SIN plugins de Kotlin
+    // ✅ AGREGA estas dos líneas (son NECESARIAS):
+    alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
     id("maven-publish")
 }
 
