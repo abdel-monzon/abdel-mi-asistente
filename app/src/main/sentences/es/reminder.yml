@@ -4,9 +4,9 @@ set:
   - ponme un recordatorio para .text. .time.
 
 list:
-  - (muestra|muéstrame) (mis|los) recordatorios
-  - que recordatorios tengo
-  - lista de recordatorios
+  - (muestra|muéstrame) (mis|los) recordatorios .dummy.
+  - que recordatorios tengo .dummy.
+  - lista de recordatorios .dummy.
 
 cancel:
   - cancela el recordatorio .index.
