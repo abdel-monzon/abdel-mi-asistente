@@ -5,7 +5,7 @@ set:
 
 list:
   - (muestra|muéstrame) (mis|los) recordatorios
-  - ¿qué recordatorios tengo?
+  - que recordatorios tengo
   - lista de recordatorios
 
 cancel:
