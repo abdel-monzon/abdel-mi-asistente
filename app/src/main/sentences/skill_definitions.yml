@@ -139,7 +139,9 @@ skills:
           - id: time
             type: string
       - id: list
-        captures: []  
+        captures:
+          - id: dummy 
+            type: string
       - id: cancel
         captures:
           - id: index
