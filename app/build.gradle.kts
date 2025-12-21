@@ -74,7 +74,6 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
-            freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
         }
     }
 
