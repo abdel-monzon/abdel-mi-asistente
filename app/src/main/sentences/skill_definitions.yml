@@ -139,7 +139,7 @@ skills:
           - id: time
             type: string
       - id: list
-        captures: []   # ✅ CORREGIDO: lista vacía explícita
+        captures: []  
       - id: cancel
         captures:
           - id: index
