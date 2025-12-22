@@ -1,3 +1,4 @@
+
 import org.eclipse.jgit.api.Git
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.stypox.dicio.unicodeCldrPlugin.UnicodeCldrLanguagesTask
@@ -133,7 +134,7 @@ dependencies {
 
     // 👇 ESTA ES LA QUE FALTABA - Hilt + WorkManager
     implementation("androidx.hilt:hilt-work:1.0.0")
-    ksp("androidx.hilt:hilt-compiler:1.0.0")
+    // ⚠️ ELIMINADA la línea duplicada: ksp("androidx.hilt:hilt-compiler:1.0.0")
 
     implementation(libs.threetenabp)
 
@@ -222,4 +223,3 @@ configurations.configureEach {
 fun gitBranch(): String {
     return Git.open(rootDir).use { it.repository.branch }
 }
-
