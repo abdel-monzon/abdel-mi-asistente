@@ -9,7 +9,6 @@ composeBom = "2025.09.01"
 datastore = "1.1.7"
 desugarJdkLibs = "2.1.5"
 # used in settings.gradle.kts for git dependencies
-# 🔽 CAMBIADO: Usamos ramas master en lugar de commits fijos
 dicioNumbers = "master"
 dicioSentencesCompiler = "master"
 exp4j = "0.4.8"
@@ -24,10 +23,12 @@ jgit = "7.3.0.202506031305-r"
 jna = "5.18.1"
 jsoup = "1.21.2"
 kotest = "6.0.3"
-kotlin = "2.2.20"
+# 🔽 CAMBIADO: Versión compatible con Room
+kotlin = "1.9.24"
 kotlinpoet = "2.2.0"
 kotlinSerialization = "1.9.0"
-ksp = "2.2.20-2.0.3"
+# 🔽 CAMBIADO: Versión compatible con Kotlin 1.9.24
+ksp = "1.9.24-1.0.20"
 navigation = "2.9.5"
 okhttp = "5.2.0"
 protobufPlugin = "0.9.5"
