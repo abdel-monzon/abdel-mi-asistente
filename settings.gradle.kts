@@ -68,14 +68,15 @@ val includeGitRepos = listOf(
         name = "dicio-numbers",
         uri = "https://github.com/abdel-monzon/dicio-numbers",
         projectPath = ":numbers",
-        // CAMBIO IMPORTANTE: Usamos "master" en lugar de un hash específico
-        commit = "master",  // Esto hará que siempre use la última versión de la rama master
+        // 🔽 CAMBIADO: Usamos "main" para tu fork (probablemente la rama principal)
+        commit = "main",
     ),
     IncludeGitRepo(
         name = "dicio-sentences-compiler",
         uri = "https://github.com/Stypox/dicio-sentences-compiler",
         projectPath = ":sentences_compiler",
-        commit = findInVersionCatalog("dicioSentencesCompiler"),
+        // 🔽 CAMBIADO: Usamos "master" directamente en lugar del commit del catálogo
+        commit = "master",
     ),
 )
 
@@ -122,11 +123,12 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
         for (repo in includeGitRepos) {
             include(repo.name) {
                 uri.set(repo.uri)
-                // ESTE ES EL CAMBIO CLAVE: Para dicio-numbers, usar branch en lugar de commit
+                // 🔽 ACTUALIZADO: Para AMBOS repositorios usamos branch.set
+                // Nota: dicio-numbers tiene rama "main", dicio-sentences-compiler tiene "master"
                 if (repo.name == "dicio-numbers") {
-                    branch.set("master")
+                    branch.set("main")  // Tu fork usa "main"
                 } else {
-                    commit.set(repo.commit)
+                    branch.set("master") // El original usa "master"
                 }
                 autoInclude.set(false)
                 includeBuild("") {
@@ -139,4 +141,3 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
         }
     }
 }
-
