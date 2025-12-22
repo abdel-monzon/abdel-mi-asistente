@@ -68,15 +68,15 @@ val includeGitRepos = listOf(
         name = "dicio-numbers",
         uri = "https://github.com/abdel-monzon/dicio-numbers",
         projectPath = ":numbers",
-        // 🔽 CAMBIADO: Usar el hash del commit del catálogo
-        commit = findInVersionCatalog("dicioNumbers"),
+        // 🔽 CAMBIADO: Usamos "master" (rama en lugar de commit específico)
+        commit = "master",
     ),
     IncludeGitRepo(
         name = "dicio-sentences-compiler",
         uri = "https://github.com/Stypox/dicio-sentences-compiler",
         projectPath = ":sentences_compiler",
-        // 🔽 CAMBIADO: Usar el hash del commit del catálogo
-        commit = findInVersionCatalog("dicioSentencesCompiler"),
+        // 🔽 CAMBIADO: Usamos "master" (rama en lugar de commit específico)
+        commit = "master",
     ),
 )
 
@@ -123,9 +123,8 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
         for (repo in includeGitRepos) {
             include(repo.name) {
                 uri.set(repo.uri)
-                // 🔽 CAMBIADO CRÍTICO: Usar ref.set() en lugar de branch.set()
-                // Esto permite usar tanto ramas como commits específicos
-                ref.set(repo.commit)
+                // 🔽 CAMBIADO CRÍTICO: Usamos branch.set() con "master"
+                branch.set("master")
                 autoInclude.set(false)
                 includeBuild("") {
                     dependencySubstitution {
