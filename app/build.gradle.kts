@@ -15,12 +15,7 @@ buildscript {
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    
-    // 🔽 FORMA CORRECTA: Kotlin plugins sin parámetros con nombre
-    kotlin("plugin.compose")
-    kotlin("plugin.parcelize")
-    kotlin("plugin.serialization")
-    
+    // 🔽 ELIMINADOS: Los plugins complementarios de Kotlin
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
@@ -28,7 +23,6 @@ plugins {
     alias(libs.plugins.dicio.unicode.cldr.plugin)
 }
 
-// 🔽 FORMA CORRECTA: Aplicar archivo externo
 apply(from = "signing.gradle")
 
 android {
@@ -84,6 +78,14 @@ android {
         viewBinding = true
         buildConfig = true
         compose = true
+    }
+    
+    // 🔽 AÑADIDO: Configuración explícita de Kotlin para Compose
+    kotlinOptions {
+        freeCompilerArgs += listOf(
+            "-Xjvm-default=all",
+            "-opt-in=kotlin.RequiresOptIn"
+        )
     }
 }
 
@@ -152,6 +154,12 @@ dependencies {
     debugImplementation(libs.debug.compose.ui.tooling)
     debugImplementation(libs.debug.compose.ui.test.manifest)
 
+    // 🔽 AÑADIDO: Dependencia para Kotlin Parcelize (si la necesitas)
+    // implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.24")
+    
+    // 🔽 AÑADIDO: Dependencia para Kotlin Serialization (si la necesitas)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
@@ -163,7 +171,9 @@ dependencies {
     implementation(libs.protobuf.java.lite)
     implementation(libs.datastore)
 
-    implementation(libs.kotlin.serialization)
+    // 🔽 ACTUALIZADO: Ya tenemos la dependencia arriba
+    // implementation(libs.kotlin.serialization)
+    
     implementation(libs.navigation)
 
     implementation(libs.jna) { artifact { type = "aar" } }
