@@ -15,6 +15,12 @@ buildscript {
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    
+    // 🔽 FORMA CORRECTA: Kotlin plugins sin parámetros con nombre
+    kotlin("plugin.compose")
+    kotlin("plugin.parcelize")
+    kotlin("plugin.serialization")
+    
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
@@ -22,12 +28,8 @@ plugins {
     alias(libs.plugins.dicio.unicode.cldr.plugin)
 }
 
-// 🔽 APLICAR PLUGINS COMPLEMENTARIOS DE KOTLIN
-    kotlin(plugin = "org.jetbrains.kotlin.plugin.compose")
-    kotlin(plugin = "org.jetbrains.kotlin.plugin.parcelize")
-    kotlin(plugin = "org.jetbrains.kotlin.plugin.serialization")
-
-    kotlin(from = "signing.gradle")
+// 🔽 FORMA CORRECTA: Aplicar archivo externo
+apply(from = "signing.gradle")
 
 android {
     namespace = "org.stypox.dicio"
