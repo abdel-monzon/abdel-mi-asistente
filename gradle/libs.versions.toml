@@ -105,9 +105,7 @@ threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref 
 com-android-application = { id = "com.android.application", version.ref = "gradle" }
 com-android-library = { id = "com.android.library", version.ref = "gradle" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-org-jetbrains-kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose" }
-org-jetbrains-kotlin-plugin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize" }
-org-jetbrains-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization" }
+# 🔽 ELIMINADOS: Los plugins complementarios no se definen aquí
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 com-google-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
