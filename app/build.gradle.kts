@@ -13,9 +13,9 @@ buildscript {
 }
 
 plugins {
+    // 🔽 SOLO estos plugins - NO añadir kotlin("plugin.compose") ni similares
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    // 🔽 ELIMINADOS: Los plugins complementarios de Kotlin
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
@@ -77,10 +77,10 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
-        compose = true
+        compose = true // 🔽 Esto habilita Compose, NO se necesita plugin aparte
     }
     
-    // 🔽 AÑADIDO: Configuración explícita de Kotlin para Compose
+    // 🔽 Configuración importante para Kotlin/Compose
     kotlinOptions {
         freeCompilerArgs += listOf(
             "-Xjvm-default=all",
@@ -142,6 +142,7 @@ dependencies {
 
     implementation(libs.appcompat)
 
+    // 🔽 Dependencias de Compose (sin plugin aparte)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
@@ -154,11 +155,11 @@ dependencies {
     debugImplementation(libs.debug.compose.ui.tooling)
     debugImplementation(libs.debug.compose.ui.test.manifest)
 
-    // 🔽 AÑADIDO: Dependencia para Kotlin Parcelize (si la necesitas)
+    // Si necesitas Parcelize, añade la dependencia (pero no el plugin)
     // implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.24")
     
-    // 🔽 AÑADIDO: Dependencia para Kotlin Serialization (si la necesitas)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    // Serialization ya está definida en libs.versions.toml
+    implementation(libs.kotlin.serialization)
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
@@ -171,9 +172,6 @@ dependencies {
     implementation(libs.protobuf.java.lite)
     implementation(libs.datastore)
 
-    // 🔽 ACTUALIZADO: Ya tenemos la dependencia arriba
-    // implementation(libs.kotlin.serialization)
-    
     implementation(libs.navigation)
 
     implementation(libs.jna) { artifact { type = "aar" } }
