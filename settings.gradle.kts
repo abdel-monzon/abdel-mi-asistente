@@ -16,7 +16,7 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
+        gradlePluginPortal() // 🔽 CRÍTICO: Para encontrar plugins como kotlin-android
     }
 }
 
