@@ -15,7 +15,6 @@ buildscript {
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    // 🔽 Estos plugins ahora no tienen versión en el TOML
     alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
     alias(libs.plugins.org.jetbrains.kotlin.plugin.parcelize)
     alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
@@ -26,7 +25,6 @@ plugins {
     alias(libs.plugins.dicio.unicode.cldr.plugin)
 }
 
-// ⬇️ Aplicar configuración de firma CONSTANTE
 apply(from = "signing.gradle")
 
 android {
@@ -105,7 +103,6 @@ protobuf {
     }
 }
 
-// workaround for https://github.com/google/ksp/issues/1590
 val kspKotlinRegex = "^ksp(.*)Kotlin$".toRegex()
 androidComponents {
     onVariants(selector().all()) { variant ->
@@ -123,31 +120,22 @@ tasks.withType(UnicodeCldrLanguagesTask::class) {
 }
 
 dependencies {
-    // -----------------------------------------------------------
-    // ✅ RECORDATORIOS - DEPENDENCIAS NECESARIAS
-    // -----------------------------------------------------------
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.androidx.work.runtime.ktx)
-
-    // 👇 ESTA ES LA QUE FALTABA - Hilt + WorkManager
     implementation("androidx.hilt:hilt-work:1.0.0")
 
     implementation(libs.threetenabp)
 
-    // Desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    // Dicio own libraries
     implementation(libs.dicio.numbers)
     implementation(project(":skill"))
 
-    // Android
     implementation(libs.appcompat)
 
-    // Compose
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
@@ -160,7 +148,6 @@ dependencies {
     debugImplementation(libs.debug.compose.ui.tooling)
     debugImplementation(libs.debug.compose.ui.test.manifest)
 
-    // Hilt Dependency Injection
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
@@ -168,42 +155,32 @@ dependencies {
     testImplementation(libs.hilt.android.testing)
     testAnnotationProcessor(libs.hilt.android.compiler)
 
-    // Protobuf and Datastore
     implementation(libs.protobuf.kotlin.lite)
     implementation(libs.protobuf.java.lite)
     implementation(libs.datastore)
 
-    // Navigation
     implementation(libs.kotlin.serialization)
     implementation(libs.navigation)
 
-    // Vosk
     implementation(libs.jna) { artifact { type = "aar" } }
     implementation(libs.vosk.android)
 
-    // LiteRT / Tensorflow Lite
     implementation(libs.litert)
 
-    // OkHttp
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
 
-    // Image loading
     implementation(libs.coil.compose)
     implementation(libs.accompanist.drawablepainter)
 
-    // Permission Flow
     implementation(libs.permission.flow.android)
     implementation(libs.permission.flow.compose)
 
-    // Miscellaneous
     implementation(libs.unbescape)
     implementation(libs.jsoup)
 
-    // Used by skills
     implementation(libs.exp4j)
 
-    // Testing
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotest.property)
@@ -212,7 +189,6 @@ dependencies {
     androidTestImplementation(libs.test.ui.automator)
 }
 
-// Required to avoid NoClassDefFoundError for ActivityInvoker during androidTest
 configurations.configureEach {
     resolutionStrategy {
         force(libs.test.core)
