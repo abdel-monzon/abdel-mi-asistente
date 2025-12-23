@@ -23,11 +23,11 @@ plugins {
 }
 
 // 🔽 APLICAR PLUGINS COMPLEMENTARIOS DE KOTLIN
-    id(plugin = "org.jetbrains.kotlin.plugin.compose")
-    id(plugin = "org.jetbrains.kotlin.plugin.parcelize")
-    id(plugin = "org.jetbrains.kotlin.plugin.serialization")
+    kotlin(plugin = "org.jetbrains.kotlin.plugin.compose")
+    kotlin(plugin = "org.jetbrains.kotlin.plugin.parcelize")
+    kotlin(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
-    id(from = "signing.gradle")
+    kotlin(from = "signing.gradle")
 
 android {
     namespace = "org.stypox.dicio"
