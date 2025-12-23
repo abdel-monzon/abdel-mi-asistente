@@ -1,4 +1,3 @@
-
 import org.eclipse.jgit.api.Git
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.stypox.dicio.unicodeCldrPlugin.UnicodeCldrLanguagesTask
@@ -16,16 +15,17 @@ buildscript {
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    // 🔽 CAMBIADO: Usamos kotlin() en lugar de alias para plugins complementarios
-    kotlin("plugin.compose")
-    kotlin("plugin.parcelize")
-    kotlin("plugin.serialization")
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
     alias(libs.plugins.dicio.unicode.cldr.plugin)
 }
+
+// 🔽 APLICAR PLUGINS COMPLEMENTARIOS DE KOTLIN
+apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+apply(plugin = "org.jetbrains.kotlin.plugin.parcelize")
+apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
 apply(from = "signing.gradle")
 
