@@ -94,3 +94,29 @@ tasks.withType<org.stypox.dicio.sentencesCompilerPlugin.SentencesCompilerTask> {
         println("   Contenido: ${sentencesDir.list()?.joinToString() ?: "vacío"}")
     }
 }
+
+// 🔽 CONFIGURACIÓN DEL PLUGIN UNICODE-CLDR (agrega al FINAL del archivo)
+tasks.withType<org.stypox.dicio.unicodeCldrPlugin.UnicodeCldrLanguagesTask> {
+    // 1. Configurar el commit de Git (usa la versión del catálogo)
+    // Esto resuelve: "property 'unicodeCldrGitCommit' doesn't have a configured value"
+    unicodeCldrGitCommit = libs.versions.unicodeCldrGitCommit.get()
+    
+    // 2. Si el archivo language.proto realmente no existe, podemos apuntar a una ubicación válida
+    // o crear el archivo si es necesario. PRIMERO verifica si existe el directorio:
+    val protoDir = project.file("src/main/proto")
+    if (!protoDir.exists()) {
+        println("⚠️  El directorio de proto no existe: ${protoDir.absolutePath}")
+        println("   Creando directorio: ${protoDir.absolutePath}")
+        protoDir.mkdirs()
+    }
+    
+    // 3. Verifica el archivo específico que el plugin espera
+    val expectedProtoFile = project.file("src/main/proto/language.proto")
+    if (!expectedProtoFile.exists()) {
+        println("❌ El archivo proto esperado no existe: ${expectedProtoFile.absolutePath}")
+        println("   El plugin 'unicode-cldr-plugin' necesita este archivo para funcionar.")
+        println("   Puede que necesites:")
+        println("   a) Copiar el archivo desde otro módulo")
+        println("   b) O el archivo se genera automáticamente en otra etapa del build")
+    }
+}
