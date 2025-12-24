@@ -1,17 +1,19 @@
 [versions]
+# 🔽 VERSIONES ACTUALIZADAS para compatibilidad
 accompanist = "0.37.3"
 activityCompose = "1.11.0"
 androidxTest = "1.7.0"
 androidxTestUiAutomator = "2.3.0"
 appcompat = "1.7.1"
 coilCompose = "2.7.0"
-composeBom = "2025.09.01"
+# 🔽 ACTUALIZADO: BOM más compatible
+composeBom = "2024.10.00"
 datastore = "1.1.7"
 desugarJdkLibs = "2.1.5"
 dicioNumbers = "master"
 dicioSentencesCompiler = "master"
 exp4j = "0.4.8"
-gradle = "8.9.1"
+gradle = "8.6.0"  # 🔽 ACTUALIZADO: AGP 8.6.0 (compatible con Kotlin 2.0+)
 dagger = "2.57.2"
 hilt = "1.2.0"
 includegitPlugin = "0.3.1"
@@ -22,12 +24,12 @@ jgit = "7.3.0.202506031305-r"
 jna = "5.18.1"
 jsoup = "1.21.2"
 kotest = "6.0.3"
-# 🔽 ACTUALIZADO: Compatible con las dependencias
-kotlin = "2.2.20"
+# 🔽 ACTUALIZADO: Kotlin 2.0.21 (más estable)
+kotlin = "2.0.21"
 kotlinpoet = "2.2.0"
 kotlinSerialization = "1.9.0"
-# 🔽 ACTUALIZADO: Compatible con Kotlin 2.2.20
-ksp = "2.2.20-2.0.3"
+# 🔽 ACTUALIZADO: KSP compatible con Kotlin 2.0.21
+ksp = "2.0.21-2.0.21"
 navigation = "2.9.5"
 okhttp = "5.2.0"
 protobufPlugin = "0.9.5"
@@ -38,8 +40,8 @@ voskAndroid = "0.3.70"
 litert = "1.4.0"
 permissionFlow = "2.1.0"
 minSdk = "21"
-targetSdk = "36"
-compileSdk = "36"
+targetSdk = "35"  # 🔽 ACTUALIZADO: 35 (más compatible)
+compileSdk = "35"  # 🔽 ACTUALIZADO: 35 (más compatible)
 androidx-room = "2.6.1"
 androidx-work = "2.9.0"
 threetenabp = "1.4.6"
@@ -106,6 +108,8 @@ threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref 
 com-android-application = { id = "com.android.application", version.ref = "gradle" }
 com-android-library = { id = "com.android.library", version.ref = "gradle" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+# 🔽 AGREGADO: Plugin de Compose Compiler (FALTABA)
+org-jetbrains-kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 com-google-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
