@@ -1,3 +1,4 @@
+
 name: Build APK
 
 on:
@@ -60,8 +61,8 @@ jobs:
           rm -rf build/
           rm -rf app/build/
           rm -rf .gradle/
-          # Build con firma constante
-          ./gradlew assembleDebug --no-daemon --no-build-cache
+          # Build con firma constante y log completo para ver errores
+          ./gradlew assembleDebug --no-daemon --no-build-cache --stacktrace --info
           ./gradlew assembleRelease --no-daemon --no-build-cache
           
       - name: Upload APKs
