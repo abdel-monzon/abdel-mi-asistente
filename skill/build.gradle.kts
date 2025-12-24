@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose) // ✅ AGREGADO: Requerido en Kotlin 2.0+
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
+    alias(libs.plugins.com.google.devtools.ksp) // ✅ AGREGADO: KSP necesario
 }
 
 android {
@@ -45,11 +46,11 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler) // ✅ Ahora funciona
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler) // ✅ Ahora funciona
 
     implementation(libs.androidx.work.runtime.ktx)
 
