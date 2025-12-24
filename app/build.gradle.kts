@@ -13,7 +13,6 @@ buildscript {
 }
 
 plugins {
-    // 🔽 SOLO estos plugins - NO añadir kotlin("plugin.compose") ni similares
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.com.google.devtools.ksp)
@@ -21,6 +20,8 @@ plugins {
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
     alias(libs.plugins.dicio.unicode.cldr.plugin)
+    // 🔽 AGREGADO: Plugin de Compose Compiler (FALTABA)
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
 }
 
 apply(from = "signing.gradle")
@@ -71,22 +72,27 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
+            // 🔽 MOVIDO DENTRO: Configuración de freeCompilerArgs
+            freeCompilerArgs.addAll(
+                "-Xjvm-default=all",
+                "-opt-in=kotlin.RequiresOptIn"
+            )
         }
     }
 
     buildFeatures {
         viewBinding = true
         buildConfig = true
-        compose = true // 🔽 Esto habilita Compose, NO se necesita plugin aparte
+        compose = true
     }
     
-    // 🔽 Configuración importante para Kotlin/Compose
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-Xjvm-default=all",
-            "-opt-in=kotlin.RequiresOptIn"
-        )
-    }
+    // ❌ ELIMINADO: Bloque kotlinOptions obsoleto
+    // kotlinOptions {
+    //     freeCompilerArgs += listOf(
+    //         "-Xjvm-default=all",
+    //         "-opt-in=kotlin.RequiresOptIn"
+    //     )
+    // }
 }
 
 tasks.withType<Test>().configureEach {
@@ -142,7 +148,6 @@ dependencies {
 
     implementation(libs.appcompat)
 
-    // 🔽 Dependencias de Compose (sin plugin aparte)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
@@ -155,10 +160,6 @@ dependencies {
     debugImplementation(libs.debug.compose.ui.tooling)
     debugImplementation(libs.debug.compose.ui.test.manifest)
 
-    // Si necesitas Parcelize, añade la dependencia (pero no el plugin)
-    // implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.24")
-    
-    // Serialization ya está definida en libs.versions.toml
     implementation(libs.kotlin.serialization)
 
     implementation(libs.hilt.android)
