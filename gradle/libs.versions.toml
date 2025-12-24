@@ -1,18 +1,18 @@
 [versions]
-# 🔽 VERSIONES ACTUALIZADAS para compatibilidad
-accompanist = "0.36.0" # ✅ Corregido: última estable compatible
+# 🔽 ACTUALIZACIÓN OFICIAL: versiones publicadas y compatibles
+accompanist = "0.36.0"
 activityCompose = "1.11.0"
 androidxTest = "1.7.0"
 androidxTestUiAutomator = "2.3.0"
 appcompat = "1.7.1"
 coilCompose = "2.7.0"
-# ✅ Corregido: BOM estable y compatible con Kotlin 2.0.21
 composeBom = "2024.12.01"
 datastore = "1.1.7"
 desugarJdkLibs = "2.1.5"
 dicioNumbers = "master"
 dicioSentencesCompiler = "master"
 exp4j = "0.4.8"
+# ✅ AGP 8.9.2 → soporta compileSdk 36
 gradle = "8.9.2"
 dagger = "2.57.2"
 hilt = "1.2.0"
@@ -24,14 +24,15 @@ jgit = "7.3.0.202506031305-r"
 jna = "5.18.1"
 jsoup = "1.21.2"
 kotest = "6.0.3"
-kotlin = "2.2.0"
+# ✅ Kotlin 2.1.10 → KSP 2.1.10-1.0.31 existe en Maven Central
+kotlin = "2.1.10"
 kotlinpoet = "2.2.0"
 kotlinSerialization = "1.9.0"
-# ✅ Corregido: KSP existente y compatible
-ksp = "2.2.0-1.0.27"
-# ✅ Corregido: versión real existente
+# ✅ KSP publicado y compatible
+ksp = "2.1.10-1.0.31"
+# ✅ Navigation existe en 2.8.4
 navigation = "2.8.4"
-# ✅ Corregido: OkHttp estable (no alpha)
+# ✅ OkHttp estable
 okhttp = "4.12.0"
 protobufPlugin = "0.9.5"
 protoc = "4.32.1"
@@ -41,6 +42,7 @@ voskAndroid = "0.3.70"
 litert = "1.4.0"
 permissionFlow = "2.1.0"
 minSdk = "21"
+# ✅ SDK 36 soportado por AGP 8.9.2
 targetSdk = "36"
 compileSdk = "36"
 androidx-room = "2.6.1"
