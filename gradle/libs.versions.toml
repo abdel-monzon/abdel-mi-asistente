@@ -29,7 +29,7 @@ kotlin = "2.0.21"
 kotlinpoet = "2.2.0"
 kotlinSerialization = "1.9.0"
 # 🔽 ACTUALIZADO: KSP compatible con Kotlin 2.0.21
-ksp = "2.0.21-2.0.21"
+ksp = "2.0.21-1.0.21"
 navigation = "2.9.5"
 okhttp = "5.2.0"
 protobufPlugin = "0.9.5"
