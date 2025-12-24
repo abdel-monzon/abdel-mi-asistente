@@ -28,7 +28,7 @@ kotlin = "2.2.0"
 kotlinpoet = "2.2.0"
 kotlinSerialization = "1.9.0"
 # ✅ Corregido: KSP existente y compatible
-ksp = "2.2.0-1.0.28"
+ksp = "2.2.0-1.0.27"
 # ✅ Corregido: versión real existente
 navigation = "2.8.4"
 # ✅ Corregido: OkHttp estable (no alpha)
