@@ -1,30 +1,14 @@
-import org.eclipse.jgit.api.Git
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.stypox.dicio.unicodeCldrPlugin.UnicodeCldrLanguagesTask
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath(libs.dicio.sentences.compiler.plugin)
-        classpath(libs.dicio.unicode.cldr.plugin)
-    }
-}
-
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
     alias(libs.plugins.dicio.unicode.cldr.plugin)
-    // 🔽 AGREGADO: Plugin de Compose Compiler (FALTABA)
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.parcelize) // ✅ AGREGADO
 }
-
-apply(from = "signing.gradle")
 
 android {
     namespace = "org.stypox.dicio"
@@ -72,7 +56,6 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
-            // 🔽 MOVIDO DENTRO: Configuración de freeCompilerArgs
             freeCompilerArgs.addAll(
                 "-Xjvm-default=all",
                 "-opt-in=kotlin.RequiresOptIn"
@@ -85,14 +68,6 @@ android {
         buildConfig = true
         compose = true
     }
-    
-    // ❌ ELIMINADO: Bloque kotlinOptions obsoleto
-    // kotlinOptions {
-    //     freeCompilerArgs += listOf(
-    //         "-Xjvm-default=all",
-    //         "-opt-in=kotlin.RequiresOptIn"
-    //     )
-    // }
 }
 
 tasks.withType<Test>().configureEach {
@@ -143,7 +118,7 @@ dependencies {
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    implementation(libs.dicio.numbers)
+    implementation(libs.dicio.numbers) // ✅ AGREGADO
     implementation(project(":skill"))
 
     implementation(libs.appcompat)
@@ -211,3 +186,4 @@ configurations.configureEach {
 fun gitBranch(): String {
     return Git.open(rootDir).use { it.repository.branch }
 }
+
