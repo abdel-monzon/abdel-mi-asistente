@@ -2,6 +2,7 @@ package org.stypox.dicio.error
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.stypox.dicio.util.ExceptionUtils
 
 /**
  * @implNote Taken with some modifications from NewPipe, file error/ErrorInfo.kt
@@ -13,3 +14,4 @@ class ErrorInfo(val stackTrace: String, val userAction: UserAction) : Parcelable
         userAction
     )
 }
+
