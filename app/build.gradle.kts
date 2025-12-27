@@ -7,7 +7,8 @@ plugins {
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
     alias(libs.plugins.dicio.unicode.cldr.plugin)
-    id("org.jetbrains.kotlin.plugin.parcelize")
+    kotlin("plugin.parcelize") version "2.1.10"
+
 }
 
 android {
