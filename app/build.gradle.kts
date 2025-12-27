@@ -1,3 +1,8 @@
+
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.stypox.dicio.unicodeCldrPlugin.UnicodeCldrLanguagesTask
+import org.eclipse.jgit.api.Git
+
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -8,7 +13,6 @@ plugins {
     alias(libs.plugins.dicio.sentences.compiler.plugin)
     alias(libs.plugins.dicio.unicode.cldr.plugin)
     kotlin("plugin.parcelize") version "2.1.10"
-
 }
 
 android {
@@ -71,6 +75,10 @@ android {
     }
 }
 
+tasks.withType<UnicodeCldrLanguagesTask> {
+    unicodeCldrGitCommit = libs.versions.unicodeCldrGitCommit.get()
+}
+
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
@@ -103,10 +111,6 @@ androidComponents {
     }
 }
 
-tasks.withType(UnicodeCldrLanguagesTask::class) {
-    unicodeCldrGitCommit = libs.versions.unicodeCldrGitCommit
-}
-
 dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
@@ -119,7 +123,7 @@ dependencies {
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    implementation(libs.dicio.numbers) // ✅ AGREGADO
+    implementation(libs.dicio.numbers)
     implementation(project(":skill"))
 
     implementation(libs.appcompat)
@@ -185,6 +189,5 @@ configurations.configureEach {
 }
 
 fun gitBranch(): String {
-    return Git.open(rootDir).use { it.repository.branch }
+    return Git.open(rootDir).use { git -> git.repository.branch }
 }
-
