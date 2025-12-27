@@ -16,3 +16,4 @@ enum class UserAction(val message: String) : Parcelable {
     WAKE_DOWNLOADING("Downloading wake word model"),
     WAKE_LOADING("Loading wake word model");
 }
+
