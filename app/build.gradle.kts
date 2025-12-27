@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
     alias(libs.plugins.dicio.unicode.cldr.plugin)
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.parcelize) // ✅ AGREGADO
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {
