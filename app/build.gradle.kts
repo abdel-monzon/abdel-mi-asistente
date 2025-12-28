@@ -1,4 +1,3 @@
-
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.stypox.dicio.unicodeCldrPlugin.UnicodeCldrLanguagesTask
 import org.eclipse.jgit.api.Git
@@ -112,6 +111,10 @@ androidComponents {
 }
 
 dependencies {
+    // DEPENDENCIAS ACTUALIZADAS Y AÑADIDAS
+    implementation("com.github.Stypox:dicio-android:0.13.1")  // ✅ VERSIÓN ACTUALIZADA
+    implementation("org.apache.commons:commons-lang3:3.12.0")  // ✅ NUEVA DEPENDENCIA
+    
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
