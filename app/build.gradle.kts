@@ -111,9 +111,13 @@ androidComponents {
 }
 
 dependencies {
-    // DEPENDENCIAS ACTUALIZADAS Y AÑADIDAS
-    implementation("com.github.Stypox:dicio-android:0.13.1")  // ✅ VERSIÓN ACTUALIZADA
-    implementation("org.apache.commons:commons-lang3:3.12.0")  // ✅ NUEVA DEPENDENCIA
+    // ✅ DEPENDENCIAS CORREGIDAS Y ESTABLES
+    
+    // ❌ ELIMINAR: implementation("com.github.Stypox:dicio-android:0.13.1")
+    // ✅ REEMPLAZAR CON VERSIÓN ESTABLE DE MAVEN CENTRAL:
+    implementation("org.dicio:dicio-skill:0.12.0")  // Versión estable en Maven Central
+    
+    implementation("org.apache.commons:commons-lang3:3.12.0")
     
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
@@ -127,7 +131,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.dicio.numbers)
-    implementation(project(":skill"))
+    implementation(project(":skill"))  // ✅ MANTENER TU MÓDULO LOCAL
 
     implementation(libs.appcompat)
 
