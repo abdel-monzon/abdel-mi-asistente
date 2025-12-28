@@ -115,7 +115,7 @@ dependencies {
     
     // ❌ ELIMINAR: implementation("com.github.Stypox:dicio-android:0.13.1")
     // ✅ REEMPLAZAR CON VERSIÓN ESTABLE DE MAVEN CENTRAL:
-    implementation("org.dicio:dicio-skill:0.12.0")  // Versión estable en Maven Central
+    implementation("org.dicio:dicio-skill:0.11.0") // Versión estable de Maven Central
     
     implementation("org.apache.commons:commons-lang3:3.12.0")
     
