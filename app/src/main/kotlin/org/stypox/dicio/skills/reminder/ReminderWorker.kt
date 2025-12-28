@@ -61,7 +61,7 @@ class ReminderWorker(
         
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_alarm)
-            .setContentTitle(context.getString(R.string.notification_reminder_title))
+            .setContentTitle("Recordatorio")
             .setContentText(reminder.text)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
@@ -69,9 +69,8 @@ class ReminderWorker(
             .build()
         
         NotificationManagerCompat.from(context).notify(
-            NOTIFICATION_ID + reminder.id,
+            NOTIFICATION_ID + reminder.id.toInt(),
             notification
         )
     }
 }
-
