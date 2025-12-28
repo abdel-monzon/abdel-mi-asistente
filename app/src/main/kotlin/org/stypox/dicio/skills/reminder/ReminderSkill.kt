@@ -6,16 +6,16 @@ import kotlinx.coroutines.flow.first
 import org.dicio.skill.context.SkillContext
 import org.dicio.skill.skill.SkillOutput
 import org.dicio.skill.standard.StandardRecognizerData
-import org.dicio.skill.standard.StandardRecognizerSkill
+import org.dicio.skill.standard.StandardSkill
 import org.stypox.dicio.sentences.Sentences.Reminder
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 class ReminderSkill(
-    correspondingSkillInfo: ReminderInfo,
+    correspondingSkillInfo: SkillInfo,  // ✅ Cambiado de ReminderInfo a SkillInfo
     data: StandardRecognizerData<Reminder>
-) : StandardRecognizerSkill<Reminder>(correspondingSkillInfo, data) {
+) : StandardSkill<Reminder>(correspondingSkillInfo, data) {
 
     private lateinit var repository: ReminderRepository
     private lateinit var workManager: WorkManager
@@ -151,4 +151,3 @@ class ReminderSkill(
         }
     }
 }
-
