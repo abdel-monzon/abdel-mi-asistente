@@ -1,15 +1,13 @@
-
 package org.stypox.dicio.skills.reminder
 
-import org.dicio.skill.SkillInfo
-import org.dicio.skill.SkillType
 import org.stypox.dicio.R
 
-object ReminderInfo : SkillInfo(
-    id = "reminder",
-    nameRes = R.string.skill_name_reminder,
-    sentenceExampleRes = R.string.skill_sentence_example_reminder,
-    iconRes = R.drawable.ic_alarm,
-    needsData = false,
-    skillType = SkillType.DYNAMIC
-)
+class ReminderInfo {
+    companion object {
+        val id: String = "reminder"
+        val name: String = "Recordatorio"
+        val icon: Int = R.drawable.ic_alarm
+        // Esta clase ahora es un simple contenedor de datos
+        // La API real de SkillInfo viene de la librería Dicio
+    }
+}
