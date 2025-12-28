@@ -202,10 +202,11 @@ class MainActivity : BaseActivity() {
      */
     private fun createReminderNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.reminder_channel_name)
-            val descriptionText = getString(R.string.reminder_channel_description)
+            val channelId = "reminder_channel" // ID consistente
+            val name = "Recordatorios" // Usando string directo
+            val descriptionText = "Notificaciones para recordatorios programados"
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(ReminderWorker.CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(channelId, name, importance).apply {
                 description = descriptionText
                 enableLights(true)
                 enableVibration(true)
@@ -256,8 +257,9 @@ class MainActivity : BaseActivity() {
      * ✅ MOSTRAR NOTIFICACIÓN DE PRUEBA (opcional para testear)
      */
     fun showTestReminderNotification() {
-        val notification = NotificationCompat.Builder(this, ReminderWorker.CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification)
+        val channelId = "reminder_channel" // ID consistente
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification) // Asegúrate de que este recurso existe
             .setContentTitle("Prueba de Recordatorio")
             .setContentText("¡Funciona! El sistema de recordatorios está activo.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
