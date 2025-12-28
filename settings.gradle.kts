@@ -16,7 +16,8 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal() // 🔽 CRÍTICO: Para encontrar plugins como kotlin-android
+        gradlePluginPortal()
+        maven { url = uri("https://jitpack.io") }  // ✅ AÑADIR JITPACK PARA PLUGINS
     }
 }
 
@@ -36,6 +37,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }  // ✅ CRÍTICO: AÑADIR JITPACK
     }
 }
 
