@@ -43,7 +43,7 @@ class SkillHandler @Inject constructor(
     private val skillContext: SkillContextInternal,
 ) {
     // TODO improve id handling (maybe just use an int that can point to an Android resource)
-    val allSkillInfoList = listOf(
+    val allSkillInfoList = listOf<SkillInfo>(
         WeatherInfo,
         SearchInfo,
         LyricsInfo,
@@ -56,12 +56,12 @@ class SkillHandler @Inject constructor(
         AgeInfo,
         MediaInfo,
         JokeInfo,
-        ReminderInfo,
+        ReminderInfo(),  // ✅ Ahora es una instancia
         ListeningInfo(dataStore),
         TranslationInfo,
     )
 
-    private val fallbackSkillInfoList = listOf(
+    private val fallbackSkillInfoList = listOf<SkillInfo>(
         TextFallbackInfo,
     )
 
@@ -85,9 +85,10 @@ class SkillHandler @Inject constructor(
                 .collectLatest { (_, enabledSkills) ->
                     // locale is not used here, because the skills directly use the sections locale
 
+                    // ✅ LÍNEAS 89-94 CORREGIDAS:
                     val newEnabledSkillsInfo = allSkillInfoList
                         .filter { enabledSkills.getOrDefault(it.id, true) }
-                        .filter { it.isAvailable(skillContext) }
+                        .filter { it.isAvailable(skillContext.android) }
 
                     _enabledSkillsInfo.value = newEnabledSkillsInfo
                     _skillRanker.value = SkillRanker(
