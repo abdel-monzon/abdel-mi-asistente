@@ -25,11 +25,11 @@ jna = "5.18.1"
 jsoup = "1.21.2"
 kotest = "6.0.3"
 # ✅ Kotlin 2.1.10 → KSP 2.1.10-1.0.31 existe en Maven Central
-kotlin = "2.1.10"
+kotlin = "2.0.21"
 kotlinpoet = "2.2.0"
 kotlinSerialization = "1.9.0"
 # ✅ KSP publicado y compatible
-ksp = "2.1.10-1.0.31"
+ksp = "2.0.21-1.0.21"
 # ✅ Navigation existe en 2.8.4
 navigation = "2.8.4"
 # ✅ OkHttp estable
