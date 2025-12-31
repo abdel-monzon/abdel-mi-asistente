@@ -111,3 +111,4 @@ com-google-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugi
 me-champeau-includegit = { id = "me.champeau.includegit", version.ref = "includegitPlugin" }
 dicio-sentences-compiler-plugin = { id = "org.stypox.dicio.sentencesCompilerPlugin", version = "1.0" }
 dicio-unicode-cldr-plugin = { id = "org.stypox.dicio.unicodeCldrPlugin", version = "1.0" }
+org-jetbrains-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
