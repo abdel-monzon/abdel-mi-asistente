@@ -5,12 +5,12 @@ import org.eclipse.jgit.api.Git
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.com.google.devtools.ksp)  // ✅ Versión 1.9.23-1.0.19 SÍ existe
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
     alias(libs.plugins.dicio.unicode.cldr.plugin)
-    id("org.jetbrains.kotlin.plugin.parcelize") version "2.1.0"  // ✅ Actualizado
+    id("org.jetbrains.kotlin.plugin.parcelize") version "1.9.23"  // ✅ Coincide con Kotlin
 }
 
 android {
