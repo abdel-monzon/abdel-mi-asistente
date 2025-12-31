@@ -5,15 +5,13 @@ import org.eclipse.jgit.api.Git
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    // ❌ ELIMINADO: alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
-    // ✅ AGREGADO: Plugin de Compose sin versión explícita
-    id("org.jetbrains.kotlin.plugin.compose")
+    // ❌ ELIMINADO COMPLETAMENTE: id("org.jetbrains.kotlin.plugin.compose")
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
     alias(libs.plugins.dicio.unicode.cldr.plugin)
-    kotlin("plugin.parcelize") version "2.1.10"
+    id("kotlin-parcelize") // ✅ Cambiado para usar la versión del plugin de Kotlin
 }
 
 android {
@@ -72,7 +70,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
-        compose = true
+        compose = true // ✅ ESTA LÍNEA ACTIVA COMPOSE
     }
 }
 
