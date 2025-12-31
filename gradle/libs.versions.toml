@@ -104,7 +104,7 @@ threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref 
 com-android-application = { id = "com.android.application", version.ref = "gradle" }
 com-android-library = { id = "com.android.library", version.ref = "gradle" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-# ✅ ELIMINADO: org-jetbrains-kotlin-plugin-compose (no necesita versión separada)
+# ❌ ELIMINADO: org-jetbrains-kotlin-plugin-compose (no necesita versión separada)
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 com-google-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
