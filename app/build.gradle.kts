@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
-    alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.com.google.devtools.ksp) // ✅ Ahora usa la versión corregida
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
@@ -111,9 +111,7 @@ androidComponents {
 }
 
 dependencies {
-    // ✅ DEPENDENCIAS CORREGIDAS Y ESTABLES
-    // ❌ SE HA ELIMINADO LA LÍNEA QUE CAUSABA EL ERROR: implementation("org.dicio:dicio-skill:0.11.0")
-    
+    // ✅ DEPENDENCIAS ESTABLES
     implementation("org.apache.commons:commons-lang3:3.12.0")
     
     implementation(libs.androidx.room.runtime)
@@ -128,7 +126,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.dicio.numbers)
-    implementation(project(":skill"))  // ✅ ESTA ES LA CLAVE: tu módulo local
+    implementation(project(":skill"))  // ✅ TU MÓDULO LOCAL
 
     implementation(libs.appcompat)
 
@@ -172,7 +170,7 @@ dependencies {
 
     implementation(libs.permission.flow.android)
     implementation(libs.permission.flow.compose)
-    implementation("com.github.Stypox:dicio-android:v0.13.1")
+
     implementation(libs.unbescape)
     implementation(libs.jsoup)
 
