@@ -172,7 +172,7 @@ dependencies {
 
     implementation(libs.permission.flow.android)
     implementation(libs.permission.flow.compose)
-
+    implementation("com.github.Stypox:dicio-android:v0.13.1")
     implementation(libs.unbescape)
     implementation(libs.jsoup)
 
