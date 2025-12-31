@@ -5,7 +5,7 @@ import org.eclipse.jgit.api.Git
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    // ✅ ELIMINADO: alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
+    // ❌ ELIMINADO: alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
     // ✅ AGREGADO: Plugin de Compose sin versión explícita
     id("org.jetbrains.kotlin.plugin.compose")
     alias(libs.plugins.com.google.devtools.ksp)
