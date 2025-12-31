@@ -1,5 +1,5 @@
 [versions]
-# 🔽 ACTUALIZACIÓN OFICIAL: versiones publicadas y compatibles
+# ✅ VERSIONES ESTABLES Y COMPATIBLES
 accompanist = "0.36.0"
 activityCompose = "1.11.0"
 androidxTest = "1.7.0"
@@ -12,7 +12,7 @@ desugarJdkLibs = "2.1.5"
 dicioNumbers = "master"
 dicioSentencesCompiler = "master"
 exp4j = "0.4.8"
-# ✅ AGP 8.9.2 → soporta compileSdk 36
+# ✅ AGP 8.9.2 es estable
 gradle = "8.9.2"
 dagger = "2.57.2"
 hilt = "1.2.0"
@@ -24,12 +24,12 @@ jgit = "7.3.0.202506031305-r"
 jna = "5.18.1"
 jsoup = "1.21.2"
 kotest = "6.0.3"
-# ✅ Kotlin 2.1.10 → KSP 2.1.10-1.0.31 existe en Maven Central
-kotlin = "2.0.21"
+# ✅ KOTLIN 1.9.23 (VERSIÓN ESTABLE MÁS COMPATIBLE)
+kotlin = "1.9.23"
 kotlinpoet = "2.2.0"
 kotlinSerialization = "1.9.0"
-# ✅ KSP publicado y compatible
-ksp = "2.0.21-1.0.17"
+# ✅ KSP COMPATIBLE CON KOTLIN 1.9.23 (ESTA VERSIÓN SÍ EXISTE)
+ksp = "1.9.23-1.0.19"
 # ✅ Navigation existe en 2.8.4
 navigation = "2.8.4"
 # ✅ OkHttp estable
@@ -42,7 +42,6 @@ voskAndroid = "0.3.70"
 litert = "1.4.0"
 permissionFlow = "2.1.0"
 minSdk = "21"
-# ✅ SDK 36 soportado por AGP 8.9.2
 targetSdk = "36"
 compileSdk = "36"
 androidx-room = "2.6.1"
@@ -118,4 +117,3 @@ com-google-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugi
 me-champeau-includegit = { id = "me.champeau.includegit", version.ref = "includegitPlugin" }
 dicio-sentences-compiler-plugin = { id = "org.stypox.dicio.sentencesCompilerPlugin", version = "1.0" }
 dicio-unicode-cldr-plugin = { id = "org.stypox.dicio.unicodeCldrPlugin", version = "1.0" }
-
