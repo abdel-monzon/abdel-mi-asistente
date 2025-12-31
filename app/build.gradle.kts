@@ -5,8 +5,10 @@ import org.eclipse.jgit.api.Git
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
-    alias(libs.plugins.com.google.devtools.ksp) // ✅ Ahora usa la versión corregida
+    // ✅ ELIMINADO: alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
+    // ✅ AGREGADO: Plugin de Compose sin versión explícita
+    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.protobuf)
     alias(libs.plugins.dicio.sentences.compiler.plugin)
@@ -111,7 +113,6 @@ androidComponents {
 }
 
 dependencies {
-    // ✅ DEPENDENCIAS ESTABLES
     implementation("org.apache.commons:commons-lang3:3.12.0")
     
     implementation(libs.androidx.room.runtime)
@@ -126,7 +127,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.dicio.numbers)
-    implementation(project(":skill"))  // ✅ TU MÓDULO LOCAL
+    implementation(project(":skill"))
 
     implementation(libs.appcompat)
 
