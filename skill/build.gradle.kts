@@ -1,8 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
-    alias(libs.plugins.com.google.devtools.ksp) // ✅ AGREGADO: KSP necesario
+    // ❌ ELIMINADO: alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
+    alias(libs.plugins.com.google.devtools.ksp)
 }
 
 android {
@@ -30,8 +32,14 @@ android {
         targetCompatibility = JavaVersion.toVersion(libs.versions.java.get())
     }
 
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
+        }
+    }
+
     buildFeatures {
-        compose = true
+        compose = true // ✅ ESTO ACTIVA COMPOSE, NO NECESITAS EL PLUGIN SEPARADO
     }
 }
 
@@ -54,7 +62,7 @@ dependencies {
 
     implementation(libs.androidx.work.runtime.ktx)
 
-    // ✅ AGREGADO: librería que faltaba (arregla el error de compilación)
+    // ✅ CORRECTO: esta dependencia debe estar aquí
     implementation(libs.dicio.numbers)
 
     testImplementation(libs.kotest.runner.junit5)
@@ -62,4 +70,3 @@ dependencies {
     testImplementation(libs.kotest.property)
     androidTestImplementation(libs.test.runner)
 }
-
