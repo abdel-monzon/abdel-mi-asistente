@@ -112,10 +112,7 @@ androidComponents {
 
 dependencies {
     // ✅ DEPENDENCIAS CORREGIDAS Y ESTABLES
-    
-    // ❌ ELIMINAR: implementation("com.github.Stypox:dicio-android:0.13.1")
-    // ✅ REEMPLAZAR CON VERSIÓN ESTABLE DE MAVEN CENTRAL:
-    implementation("org.dicio:dicio-skill:0.11.0") // Versión estable de Maven Central
+    // ❌ SE HA ELIMINADO LA LÍNEA QUE CAUSABA EL ERROR: implementation("org.dicio:dicio-skill:0.11.0")
     
     implementation("org.apache.commons:commons-lang3:3.12.0")
     
@@ -131,7 +128,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.dicio.numbers)
-    implementation(project(":skill"))  // ✅ MANTENER TU MÓDULO LOCAL
+    implementation(project(":skill"))  // ✅ ESTA ES LA CLAVE: tu módulo local
 
     implementation(libs.appcompat)
 
