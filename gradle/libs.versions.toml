@@ -101,4 +101,12 @@ androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version
 threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
 
 [plugins]
-com-android-application
+com-android-application = { id = "com.android.application", version.ref = "gradle" }
+com-android-library = { id = "com.android.library", version.ref = "gradle" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
+com-google-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+me-champeau-includegit = { id = "me.champeau.includegit", version.ref = "includegitPlugin" }
+dicio-sentences-compiler-plugin = { id = "org.stypox.dicio.sentencesCompilerPlugin", version = "1.0" }
+dicio-unicode-cldr-plugin = { id = "org.stypox.dicio.unicodeCldrPlugin", version = "1.0" }
