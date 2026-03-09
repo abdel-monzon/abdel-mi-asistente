@@ -1,9 +1,6 @@
 import me.champeau.gradle.igp.gitRepositories
 import org.eclipse.jgit.api.Git
 import java.io.FileInputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 import java.util.Properties
 
 rootProject.name = "Dicio"
@@ -17,7 +14,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven { url = uri("https://jitpack.io") }  // ✅ AÑADIR JITPACK PARA PLUGINS
+        maven { url = uri("https://jitpack.io") }  // ✅ JitPack para plugins
     }
 }
 
@@ -37,7 +34,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io") }  // ✅ CRÍTICO: AÑADIR JITPACK
+        maven { url = uri("https://jitpack.io") }  // ✅ JitPack para dependencias
     }
 }
 
@@ -87,7 +84,6 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
             }
         }
     }
-
 } else {
     for (repo in includeGitRepos) {
         val file = File("$rootDir/checkouts/${repo.name}")
@@ -107,8 +103,10 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
     gitRepositories {
         for (repo in includeGitRepos) {
             include(repo.name) {
+                // ✅ URL pública sin x-access-token
                 uri.set(repo.uri)
-                branch.set("master")
+                // ✅ Rama correcta
+                branch.set(repo.commit)
                 autoInclude.set(false)
                 includeBuild("") {
                     dependencySubstitution {
